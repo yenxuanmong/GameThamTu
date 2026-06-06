@@ -5,7 +5,7 @@
   "main": "dist/app.js",
   "scripts": {
     "dev": "tsx watch src/app.ts",
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "build": "npx tsc --project tsconfig.json && npx tsc-alias -p tsconfig.json",
     "start": "node dist/app.js",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
