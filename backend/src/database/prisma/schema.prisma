@@ -1,0 +1,561 @@
+// ============================================
+// Prisma Schema — Detective Royale
+// ============================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum PlayerStatus {
+  online
+  offline
+  in_match
+  in_queue
+  banned
+}
+
+enum RankTier {
+  rookie
+  detective
+  inspector
+  senior_inspector
+  chief_inspector
+  superintendent
+  commissioner
+  legendary
+}
+
+enum DifficultyLevel {
+  easy
+  medium
+  hard
+  expert
+  nightmare
+}
+
+enum CaseStatus {
+  generating
+  active
+  completed
+  archived
+}
+
+enum MatchStatus {
+  waiting
+  starting
+  active
+  conclusion
+  finished
+  cancelled
+  abandoned
+}
+
+enum EvidenceType {
+  physical
+  forensic
+  document
+  digital
+  testimonial
+  circumstantial
+  alibi
+}
+
+enum WitnessPersonality {
+  cooperative
+  nervous
+  hostile
+  deceptive
+  confused
+  protective
+  opportunistic
+}
+
+enum HonestyLevel {
+  always_honest
+  mostly_honest
+  mixed
+  mostly_lying
+  always_lying
+}
+
+enum MatchResult {
+  win
+  loss
+  draw
+  abandoned
+}
+
+enum RoomVisibility {
+  public
+  private
+}
+
+// ============================================
+// PLAYER & AUTH
+// ============================================
+
+model Player {
+  id            String        @id @default(uuid())
+  username      String        @unique @db.VarChar(32)
+  email         String        @unique @db.VarChar(256)
+  passwordHash  String
+  avatarUrl     String?
+  status        PlayerStatus  @default(offline)
+  isEmailVerified Boolean     @default(false)
+  isBanned      Boolean       @default(false)
+  banReason     String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  lastActiveAt  DateTime      @default(now())
+
+  // Relations
+  rank          PlayerRank?
+  stats         PlayerStats?
+  preferences   PlayerPreferences?
+  matchPlayers  MatchPlayer[]
+  refreshTokens RefreshToken[]
+  discoveries   EvidenceDiscovery[]
+  notebookEntries NotebookEntry[]
+  conclusions   PlayerConclusion[]
+  scores        MatchScore[]
+
+  @@index([email])
+  @@index([username])
+  @@map("players")
+}
+
+model RefreshToken {
+  id          String    @id @default(uuid())
+  token       String    @unique
+  playerId    String
+  player      Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  isRevoked   Boolean   @default(false)
+
+  @@index([playerId])
+  @@map("refresh_tokens")
+}
+
+model PlayerRank {
+  id          String      @id @default(uuid())
+  playerId    String      @unique
+  player      Player      @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  tier        RankTier    @default(rookie)
+  points      Int         @default(0)
+  peakPoints  Int         @default(0)
+  season      Int         @default(1)
+  wins        Int         @default(0)
+  losses      Int         @default(0)
+  streak      Int         @default(0)
+  updatedAt   DateTime    @updatedAt
+
+  @@map("player_ranks")
+}
+
+model PlayerStats {
+  id                    String    @id @default(uuid())
+  playerId              String    @unique
+  player                Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  totalMatches          Int       @default(0)
+  totalWins             Int       @default(0)
+  totalAccuracyScore    Int       @default(0)
+  avgAccuracy           Float     @default(0)
+  avgTimeToSolve        Float     @default(0)
+  perfectSolves         Int       @default(0)
+  killerIdentifiedCount Int       @default(0)
+  updatedAt             DateTime  @updatedAt
+
+  @@map("player_stats")
+}
+
+model PlayerPreferences {
+  id                    String          @id @default(uuid())
+  playerId              String          @unique
+  player                Player          @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  preferredDifficulty   DifficultyLevel @default(medium)
+  preferRegion          String?
+  enableVoiceChat       Boolean         @default(true)
+  enableNotifications   Boolean         @default(true)
+  updatedAt             DateTime        @updatedAt
+
+  @@map("player_preferences")
+}
+
+// ============================================
+// CASE
+// ============================================
+
+model Case {
+  id          String          @id @default(uuid())
+  title       String
+  description String          @db.Text
+  difficulty  DifficultyLevel
+  status      CaseStatus      @default(generating)
+  seed        String          @unique // for reproducibility
+  tags        String[]
+  
+  // Victim info (denormalized for quick access)
+  victimName        String
+  victimAge         Int
+  victimOccupation  String
+  victimBackstory   String    @db.Text
+  causeOfDeath      String
+  timeOfDeath       DateTime
+  locationFound     String
+
+  // Solution (hidden from players)
+  killerId          String
+  motive            String
+  weapon            String
+  murderLocation    String
+  solutionTimeline  String    @db.Text
+  solutionMethod    String    @db.Text
+  solutionNarrative String    @db.Text
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  suspects    Suspect[]
+  witnesses   Witness[]
+  evidences   Evidence[]
+  timelines   TimelineEvent[]
+  matches     Match[]
+
+  @@index([difficulty])
+  @@index([status])
+  @@map("cases")
+}
+
+// ============================================
+// SUSPECTS
+// ============================================
+
+model Suspect {
+  id            String    @id @default(uuid())
+  caseId        String
+  case          Case      @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  name          String
+  age           Int
+  occupation    String
+  backstory     String    @db.Text
+  personality   String
+  isKiller      Boolean   @default(false)
+  alibi         String    @db.Text
+  alibiIsTrue   Boolean
+  motive        String?   // only meaningful for killer
+  relationships Json      // Record<suspectId | 'victim', description>
+  createdAt     DateTime  @default(now())
+
+  // Relations
+  evidencesImplicated Evidence[] @relation("EvidenceImplicatesSuspect")
+
+  @@index([caseId])
+  @@map("suspects")
+}
+
+// ============================================
+// WITNESSES / NPCs
+// ============================================
+
+model Witness {
+  id                  String              @id @default(uuid())
+  caseId              String
+  case                Case                @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  name                String
+  age                 Int
+  occupation          String
+  backstory           String              @db.Text
+  personality         WitnessPersonality
+  honestyLevel        HonestyLevel
+  isKiller            Boolean             @default(false)
+  isSuspect           Boolean             @default(false)
+  alibi               String              @db.Text
+  alibiIsTrue         Boolean
+  knownFacts          String[]
+  hiddenFacts         String[]
+  relationships       Json                // WitnessRelationship[]
+  memories            Json                // WitnessMemory[]
+  createdAt           DateTime            @default(now())
+
+  // Relations
+  dialogueSessions    NPCDialogueSession[]
+
+  @@index([caseId])
+  @@map("witnesses")
+}
+
+model NPCDialogueSession {
+  id                  String    @id @default(uuid())
+  witnessId           String
+  witness             Witness   @relation(fields: [witnessId], references: [id], onDelete: Cascade)
+  matchId             String
+  match               Match     @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  playerId            String
+  stressLevel         String    @default("calm")
+  trustScore          Float     @default(0.5)
+  revealedFacts       String[]
+  contradictionCount  Int       @default(0)
+  messageCount        Int       @default(0)
+  conversationHistory Json      // DialogueTurn[]
+  startedAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@unique([witnessId, matchId, playerId])
+  @@index([matchId])
+  @@map("npc_dialogue_sessions")
+}
+
+// ============================================
+// EVIDENCE
+// ============================================
+
+model Evidence {
+  id            String          @id @default(uuid())
+  caseId        String
+  case          Case            @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  type          EvidenceType
+  name          String
+  description   String          @db.Text
+  location      String
+  isReal        Boolean
+  isFakeEvidence Boolean        @default(false)
+  reliability   String          @default("suspected")
+  pointsTo      String?         // suspectId
+  imageUrl      String?
+  metadata      Json            @default("{}")
+
+  // Relations
+  implicatedSuspects Suspect[] @relation("EvidenceImplicatesSuspect")
+  discoveries        EvidenceDiscovery[]
+
+  @@index([caseId])
+  @@index([isReal])
+  @@map("evidences")
+}
+
+model EvidenceDiscovery {
+  id            String    @id @default(uuid())
+  evidenceId    String
+  evidence      Evidence  @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+  playerId      String
+  player        Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  matchId       String
+  match         Match     @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  sharedWith    String[]  // playerIds
+  notes         String    @db.Text @default("")
+  discoveredAt  DateTime  @default(now())
+
+  @@unique([evidenceId, playerId, matchId])
+  @@index([matchId])
+  @@map("evidence_discoveries")
+}
+
+// ============================================
+// TIMELINE
+// ============================================
+
+model TimelineEvent {
+  id            String    @id @default(uuid())
+  caseId        String
+  case          Case      @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  timestamp     DateTime
+  description   String    @db.Text
+  involvedIds   String[]  // suspectId | 'victim' | 'killer'
+  location      String
+  isKeyEvent    Boolean   @default(false)   // part of the murder sequence
+  isPublicInfo  Boolean   @default(true)    // false = only discoverable via clues
+  evidenceId    String?   // linked evidence if any
+  order         Int
+
+  @@index([caseId])
+  @@map("timeline_events")
+}
+
+// ============================================
+// MATCH & ROOM
+// ============================================
+
+model Room {
+  id              String          @id @default(uuid())
+  name            String
+  hostId          String
+  visibility      RoomVisibility  @default(public)
+  passwordHash    String?
+  difficulty      DifficultyLevel @default(medium)
+  maxPlayers      Int             @default(4)
+  currentPlayers  Int             @default(0)
+  isInMatch       Boolean         @default(false)
+  settings        Json
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  matches         Match[]
+
+  @@index([visibility])
+  @@map("rooms")
+}
+
+model Match {
+  id                    String        @id @default(uuid())
+  roomId                String
+  room                  Room          @relation(fields: [roomId], references: [id])
+  caseId                String
+  case                  Case          @relation(fields: [caseId], references: [id])
+  difficulty            DifficultyLevel
+  status                MatchStatus   @default(waiting)
+  phase                 String        @default("investigation")
+  maxPlayers            Int           @default(4)
+  durationSeconds       Int
+  startedAt             DateTime?
+  endedAt               DateTime?
+  winnerId              String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  // Relations
+  players               MatchPlayer[]
+  conclusions           PlayerConclusion[]
+  scores                MatchScore[]
+  discoveries           EvidenceDiscovery[]
+  dialogueSessions      NPCDialogueSession[]
+
+  @@index([status])
+  @@index([roomId])
+  @@map("matches")
+}
+
+model MatchPlayer {
+  id                    String    @id @default(uuid())
+  matchId               String
+  match                 Match     @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  playerId              String
+  player                Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  joinedAt              DateTime  @default(now())
+  isReady               Boolean   @default(false)
+  isHost                Boolean   @default(false)
+  hasSubmitted          Boolean   @default(false)
+  hintsUsed             Int       @default(0)
+  timeSpent             Int       @default(0) // seconds
+  notebookEntries       NotebookEntry[]
+
+  @@unique([matchId, playerId])
+  @@index([matchId])
+  @@map("match_players")
+}
+
+// ============================================
+// SCORING & CONCLUSIONS
+// ============================================
+
+model PlayerConclusion {
+  id            String    @id @default(uuid())
+  matchId       String
+  match         Match     @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  playerId      String
+  player        Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  submittedAt   DateTime  @default(now())
+  killerId      String
+  motive        String
+  weapon        String
+  location      String
+  timeline      String    @db.Text
+  narrative     String    @db.Text
+
+  score         MatchScore?
+
+  @@unique([matchId, playerId])
+  @@index([matchId])
+  @@map("player_conclusions")
+}
+
+model MatchScore {
+  id              String    @id @default(uuid())
+  matchId         String
+  match           Match     @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  playerId        String
+  player          Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  conclusionId    String    @unique
+  conclusion      PlayerConclusion @relation(fields: [conclusionId], references: [id], onDelete: Cascade)
+  totalScore      Int       // 0–1000
+  killerScore     Int       // 0–300
+  motiveScore     Int       // 0–200
+  weaponScore     Int       // 0–150
+  locationScore   Int       // 0–100
+  timelineScore   Int       // 0–150
+  narrativeScore  Int       // 0–100
+  timeBonus       Int       // 0–100
+  isCorrect       Boolean
+  finalRank       Int       // 1–4
+  rpChange        Int       // RP gained/lost
+  result          MatchResult
+
+  @@unique([matchId, playerId])
+  @@index([matchId])
+  @@map("match_scores")
+}
+
+// ============================================
+// NOTEBOOK
+// ============================================
+
+model NotebookEntry {
+  id                String        @id @default(uuid())
+  matchPlayerId     String
+  matchPlayer       MatchPlayer   @relation(fields: [matchPlayerId], references: [id], onDelete: Cascade)
+  playerId          String
+  player            Player        @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  content           String        @db.Text
+  relatedEvidenceId String?
+  relatedSuspectId  String?
+  relatedWitnessId  String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@index([matchPlayerId])
+  @@map("notebook_entries")
+}
+
+// ============================================
+// SEASON & LEADERBOARD
+// ============================================
+
+model Season {
+  id            String    @id @default(uuid())
+  number        Int       @unique
+  name          String
+  startDate     DateTime
+  endDate       DateTime
+  isActive      Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+
+  leaderboard   SeasonLeaderboard[]
+
+  @@map("seasons")
+}
+
+model SeasonLeaderboard {
+  id          String    @id @default(uuid())
+  seasonId    String
+  season      Season    @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  playerId    String
+  rank        Int
+  points      Int
+  wins        Int
+  tier        RankTier
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([seasonId, playerId])
+  @@index([seasonId, rank])
+  @@map("season_leaderboard")
+}

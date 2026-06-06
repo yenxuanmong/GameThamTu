@@ -1,0 +1,455 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_SceneGUID: 00000000000000000000000000000004
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 9
+  m_Fog: 1
+  m_FogColor: {r: 0.04, g: 0.04, b: 0.06, a: 1}
+  m_FogMode: 3
+  m_FogDensity: 0.02
+  m_AmbientSkyColor: {r: 0.06, g: 0.06, b: 0.08, a: 1}
+  m_AmbientIntensity: 0.8
+  m_AmbientMode: 0
+  m_SkyboxMaterial: {fileID: 0}
+--- !u!157 &3
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 12
+  m_GIWorkflowMode: 1
+  m_GISettings:
+    serializedVersion: 2
+    m_BounceScale: 1
+    m_IndirectOutputScale: 1
+    m_AlbedoBoost: 1
+    m_EnableBakedLightmaps: 1
+    m_EnableRealtimeLightmaps: 0
+--- !u!196 &4
+NavMeshSettings:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    serializedVersion: 2
+    agentTypeID: 0
+    agentRadius: 0.4
+    agentHeight: 1.8
+    agentSlope: 30
+    agentClimb: 0.3
+# ============================================================
+# GameBootstrapper
+# ============================================================
+--- !u!1 &400000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_Component:
+  - component: {fileID: 400000002}
+  - component: {fileID: 400000003}
+  m_Layer: 0
+  m_Name: GameBootstrapper
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &400000002
+Transform:
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &400000003
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: gamebootstrapper_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# InvestigationManager — scene boot controller
+# ============================================================
+--- !u!1 &400000010
+GameObject:
+  m_Component:
+  - component: {fileID: 400000011}
+  - component: {fileID: 400000012}
+  - component: {fileID: 400000013}
+  - component: {fileID: 400000014}
+  - component: {fileID: 400000015}
+  m_Layer: 0
+  m_Name: InvestigationManager
+  m_IsActive: 1
+--- !u!4 &400000011
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &400000012
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: investigationmanager_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  # Inspector refs: _loadingPanel, _investigationRoot, _deductionPanel, _submittedOverlay
+  # _timerText, _phaseText, _hintsText, _caseTitle, _victimName
+  # _evidenceSystem, _npcManager, _deductionBoard
+--- !u!114 &400000013
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: gamemanager_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  # Inspector refs: _hintBtn, _openInventoryBtn, _openDeductionBtn, _leaveMatchBtn
+  # _finalMinutesBanner, _submittedBanner, _otherPlayersBar, _otherPlayerIconPrefab
+  # _inventoryUI, _deductionUI, _evidenceSystem
+--- !u!114 &400000014
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: evidencesystem_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000015
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: npcmanager_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  # Inspector refs: _dialoguePrefab, _dialogueContainer
+# ============================================================
+# HUD Canvas — timer, phase, hints, player bar
+# ============================================================
+--- !u!1 &400000020
+GameObject:
+  m_Component:
+  - component: {fileID: 400000021}
+  - component: {fileID: 400000022}
+  - component: {fileID: 400000023}
+  - component: {fileID: 400000024}
+  - component: {fileID: 400000025}
+  - component: {fileID: 400000026}
+  - component: {fileID: 400000027}
+  m_Layer: 5
+  m_Name: HUDCanvas
+  m_TagString: UICanvas
+  m_IsActive: 1
+--- !u!4 &400000021
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!223 &400000022
+Canvas:
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_TargetDisplay: 0
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_SortingOrder: 10
+--- !u!114 &400000023
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: hud_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  # _timerText, _timerFill, _phaseText, _hintsText, _hintBtn, _caseTitleText, _victimText, _submittedText
+--- !u!114 &400000024
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: inventoryui_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000025
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: deductionui_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000026
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: evidenceui_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000027
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: notificationtoast_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Investigation Panels Canvas — scanners, forensics, notebook
+# ============================================================
+--- !u!1 &400000030
+GameObject:
+  m_Component:
+  - component: {fileID: 400000031}
+  - component: {fileID: 400000032}
+  - component: {fileID: 400000033}
+  - component: {fileID: 400000034}
+  - component: {fileID: 400000035}
+  - component: {fileID: 400000036}
+  - component: {fileID: 400000037}
+  - component: {fileID: 400000038}
+  - component: {fileID: 400000039}
+  m_Layer: 5
+  m_Name: InvestigationPanelsCanvas
+  m_IsActive: 1
+--- !u!4 &400000031
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!223 &400000032
+Canvas:
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_SortingOrder: 20
+--- !u!114 &400000033
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: evidencescanner_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000034
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: forensicsystem_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000035
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: cameraviewer_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000036
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: notebookmanager_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000037
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: suspectboard_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000038
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: timelineviewer_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000039
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: casebriefingui_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Deduction Board Canvas
+# ============================================================
+--- !u!1 &400000040
+GameObject:
+  m_Component:
+  - component: {fileID: 400000041}
+  - component: {fileID: 400000042}
+  - component: {fileID: 400000043}
+  m_Layer: 5
+  m_Name: DeductionCanvas
+  m_IsActive: 1
+--- !u!4 &400000041
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!223 &400000042
+Canvas:
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_SortingOrder: 30
+--- !u!114 &400000043
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: deductionboard_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# NPC Dialogue Canvas
+# ============================================================
+--- !u!1 &400000050
+GameObject:
+  m_Component:
+  - component: {fileID: 400000051}
+  - component: {fileID: 400000052}
+  - component: {fileID: 400000053}
+  m_Layer: 5
+  m_Name: NPCDialogueCanvas
+  m_IsActive: 1
+--- !u!4 &400000051
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!223 &400000052
+Canvas:
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_SortingOrder: 25
+--- !u!114 &400000053
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: witnesslistui_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Multiplayer / Voice / Sync
+# ============================================================
+--- !u!1 &400000060
+GameObject:
+  m_Component:
+  - component: {fileID: 400000061}
+  - component: {fileID: 400000062}
+  - component: {fileID: 400000063}
+  - component: {fileID: 400000064}
+  m_Layer: 0
+  m_Name: MultiplayerManager
+  m_IsActive: 1
+--- !u!4 &400000061
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &400000062
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: syncplayer_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000063
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: voicechat_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &400000064
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: reconnectmanager_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Tutorial
+# ============================================================
+--- !u!1 &400000070
+GameObject:
+  m_Component:
+  - component: {fileID: 400000071}
+  - component: {fileID: 400000072}
+  m_Layer: 5
+  m_Name: TutorialCanvas
+  m_IsActive: 1
+--- !u!4 &400000071
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &400000072
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: tutorialmanager_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# MiniMap Canvas
+# ============================================================
+--- !u!1 &400000080
+GameObject:
+  m_Component:
+  - component: {fileID: 400000081}
+  - component: {fileID: 400000082}
+  m_Layer: 5
+  m_Name: MiniMapCanvas
+  m_IsActive: 1
+--- !u!4 &400000081
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &400000082
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: minimapui_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Emote System
+# ============================================================
+--- !u!1 &400000090
+GameObject:
+  m_Component:
+  - component: {fileID: 400000091}
+  - component: {fileID: 400000092}
+  m_Layer: 5
+  m_Name: EmoteSystem
+  m_IsActive: 1
+--- !u!4 &400000091
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &400000092
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: emotesystem_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Main Camera
+# ============================================================
+--- !u!1 &400000100
+GameObject:
+  m_Component:
+  - component: {fileID: 400000101}
+  - component: {fileID: 400000102}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_IsActive: 1
+--- !u!4 &400000101
+Transform:
+  m_LocalPosition: {x: 0, y: 5, z: -10}
+  m_LocalRotation: {x: 0.17, y: 0, z: 0, w: 0.98}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!20 &400000102
+Camera:
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.04, g: 0.04, b: 0.06, a: 1}
+  m_NearClipPlane: 0.3
+  m_FarClipPlane: 500
+  m_Fov: 60
+  m_Depth: -1
+  m_HDR: 1
+  m_AllowMSAA: 1
+# ============================================================
+# Scene Lighting
+# ============================================================
+--- !u!1 &400000110
+GameObject:
+  m_Component:
+  - component: {fileID: 400000111}
+  - component: {fileID: 400000112}
+  m_Layer: 0
+  m_Name: Directional Light
+  m_IsActive: 1
+--- !u!4 &400000111
+Transform:
+  m_LocalRotation: {x: 0.408, y: -0.234, z: 0.109, w: 0.875}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!108 &400000112
+Light:
+  m_ObjectHideFlags: 0
+  m_Color: {r: 0.8, g: 0.75, b: 0.65, a: 1}
+  m_Intensity: 0.6
+  m_Range: 10
+  m_SpotAngle: 30
+  m_Type: 1
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 0.7
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2

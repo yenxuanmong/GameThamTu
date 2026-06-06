@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de285e3d55eeb6145a93e95c21d6d845, type: 3}
+  m_Name: ForwardRenderer
+  m_EditorClassIdentifier: 
+  m_RendererFeatures: []
+  m_RenderPassMap: []
+  m_OpaqueLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_TransparentLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_DefaultStencilState:
+    passOperation: 0
+    failOperation: 0
+    zFailOperation: 0
+    compareFunction: 8
+    readMask: 255
+    writeMask: 255
+    enabled: 0
+  m_ShadowTransparentReceive: 1
+  m_PostProcessData: {fileID: 0}
+  m_Shaders:
+    blitPS: {fileID: 0}
+    copyDepthPS: {fileID: 0}
+    screenSpaceShadowPS: {fileID: 0}
+    samplingPS: {fileID: 0}
+    stencilDeferredPS: {fileID: 0}
+    fallbackError: {fileID: 0}
+    materialError: {fileID: 0}

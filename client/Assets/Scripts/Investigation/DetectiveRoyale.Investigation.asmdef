@@ -1,0 +1,17 @@
+{
+    "name": "DetectiveRoyale.Investigation",
+    "rootNamespace": "DetectiveRoyale.Investigation",
+    "references": [
+        "DetectiveRoyale.Core",
+        "DetectiveRoyale.NPC"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
