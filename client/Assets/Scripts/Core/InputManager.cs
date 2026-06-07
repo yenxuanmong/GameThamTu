@@ -2,8 +2,6 @@
 // InputManager — global keyboard shortcuts for investigation
 // ============================================
 using UnityEngine;
-using DetectiveRoyale.UI;
-using DetectiveRoyale.Investigation;
 
 namespace DetectiveRoyale.Core
 {
@@ -16,9 +14,9 @@ namespace DetectiveRoyale.Core
         public static InputManager Instance { get; private set; }
 
         [Header("Refs (Investigation scene only)")]
-        [SerializeField] private InventoryUI  _inventoryUI;
-        [SerializeField] private DeductionUI  _deductionUI;
-        [SerializeField] private HUD          _hud;
+        [SerializeField] private DetectiveRoyale.UI.InventoryUI  _inventoryUI;
+        [SerializeField] private DetectiveRoyale.UI.DeductionUI  _deductionUI;
+        [SerializeField] private DetectiveRoyale.UI.HUD          _hud;
 
         void Awake()
         {
@@ -47,7 +45,7 @@ namespace DetectiveRoyale.Core
 
             // H — request hint
             if (Input.GetKeyDown(KeyCode.H))
-                InvestigationManager.Instance?.OnClickHint();
+                DetectiveRoyale.Investigation.InvestigationManager.Instance?.OnClickHint();
 
             // Escape — close any open panel (handled per-panel via close buttons)
             if (Input.GetKeyDown(KeyCode.Escape))

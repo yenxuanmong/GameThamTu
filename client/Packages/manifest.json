@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "com.endel.nativewebsocket": "1.1.4",
-    "com.itisnajim.socketiounity": "1.0.7",
     "com.unity.2d.animation": "14.0.4",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
@@ -66,8 +65,7 @@
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
       "scopes": [
-        "com.endel.nativewebsocket",
-        "com.itisnajim.socketiounity"
+        "com.endel.nativewebsocket"
       ]
     }
   ]

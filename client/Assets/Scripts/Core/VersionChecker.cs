@@ -18,7 +18,7 @@ namespace DetectiveRoyale.Core
     public class VersionChecker : MonoBehaviour
     {
         [SerializeField] private string _clientVersion = "1.0.0";
-        [SerializeField] private UI.NotificationToast _toast;
+        [SerializeField] private UnityEngine.Object _toast; // NotificationToast ref (optional)
 
         void Start() => StartCoroutine(Check());
 
@@ -29,7 +29,7 @@ namespace DetectiveRoyale.Core
                 {
                     if (resp.maintenanceMode)
                     {
-                        UI.NotificationToast.Show(
+                        DetectiveRoyale.UI.NotificationToast.Show(
                             resp.maintenanceMessage ?? "Server maintenance in progress.",
                             "warning", 10f);
                     }
@@ -37,7 +37,7 @@ namespace DetectiveRoyale.Core
                     if (!string.IsNullOrEmpty(resp.minClientVersion) &&
                         CompareVersions(_clientVersion, resp.minClientVersion) < 0)
                     {
-                        UI.NotificationToast.Show(
+                        DetectiveRoyale.UI.NotificationToast.Show(
                             "Your client is outdated. Please update the game.",
                             "error", 0f);
                     }

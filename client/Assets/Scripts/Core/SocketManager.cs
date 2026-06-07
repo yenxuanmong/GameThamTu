@@ -133,7 +133,7 @@ namespace DetectiveRoyale.Core
         public void LeaveQueue() => Emit(ClientEvent.QueueLeave);
 
         // ---- Match ----
-        public void SubmitConclusion(string matchId, Models.ConclusionPayload conclusion) =>
+        public void SubmitConclusion(string matchId, DetectiveRoyale.Core.Models.ConclusionPayload conclusion) =>
             Emit(ClientEvent.MatchSubmitConclusion, new { matchId, conclusion });
         public void RequestHint(string matchId) =>
             Emit(ClientEvent.MatchRequestHint, new { matchId });
@@ -200,29 +200,16 @@ namespace DetectiveRoyale.Core
 
     // ---- Socket payload types ----
 
-    [Serializable] public class RoomSocketPayload   { public Models.Room room; public string playerId; public string roomId; }
+    [Serializable] public class RoomSocketPayload   { public Room room; public string playerId; public string roomId; }
     [Serializable] public class CountdownPayload    { public int seconds; }
     [Serializable] public class MatchStartedPayload { public string matchId; public string caseId; }
     [Serializable] public class PhasePayload        { public string phase; public int timeRemaining; }
     [Serializable] public class TimerPayload        { public int timeRemaining; }
     [Serializable] public class SubmitPayload       { public string playerId; public string submittedAt; }
-    [Serializable] public class MatchEndedPayload   { public Models.MatchScore[] scores; public string winnerId; }
+    [Serializable] public class MatchEndedPayload   { public MatchScore[] scores; public string winnerId; }
     [Serializable] public class EvidenceFoundPayload{ public string evidenceId; public string playerId; }
     [Serializable] public class HintPayload         { public string hint; public int hintsRemaining; }
     [Serializable] public class NPCResponsePayload  { public string witnessId; public string message; public string stressLevel; }
     [Serializable] public class SocketErrorPayload  { public string code; public string message; }
     [Serializable] public class NotificationPayload { public string type; public string message; }
-
-    namespace Models
-    {
-        [Serializable] public class ConclusionPayload
-        {
-            public string killerId;
-            public string motive;
-            public string weapon;
-            public string location;
-            public string timeline;
-            public string narrative;
-        }
-    }
 }

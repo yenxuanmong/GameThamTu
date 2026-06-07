@@ -3,9 +3,6 @@
 // Attach to a single GameObject in the FIRST scene (Splash/MainMenu)
 // ============================================
 using UnityEngine;
-using DetectiveRoyale.Authentication;
-using DetectiveRoyale.Multiplayer;
-using DetectiveRoyale.UI;
 
 namespace DetectiveRoyale.Core
 {
