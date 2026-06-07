@@ -7,62 +7,6 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "com.nghiemf5.com.endel.nativewebsocket": {
-      "version": "file:com.nghiemf5.com.endel.nativewebsocket",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.test-framework": "1.6.0"
-      }
-    },
-    "com.nghiemf5.com.itisnajim.socketiounity": {
-      "version": "file:com.nghiemf5.com.itisnajim.socketiounity",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.test-framework": "1.6.0"
-      }
-    },
-    "com.nghiemf5.com.unity.inputsystem": {
-      "version": "file:com.nghiemf5.com.unity.inputsystem",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.test-framework": "1.6.0"
-      }
-    },
-    "com.nghiemf5.com.unity.nuget.newtonsoft-json": {
-      "version": "file:com.nghiemf5.com.unity.nuget.newtonsoft-json",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.test-framework": "1.6.0"
-      }
-    },
-    "com.nghiemf5.com.unity.render-pipelines.universal": {
-      "version": "file:com.nghiemf5.com.unity.render-pipelines.universal",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.test-framework": "1.6.0"
-      }
-    },
-    "com.nghiemf5.com.unity.textmeshpro": {
-      "version": "file:com.nghiemf5.com.unity.textmeshpro",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.test-framework": "1.6.0"
-      }
-    },
-    "com.nghiemf5.com.unity.webrtc": {
-      "version": "file:com.nghiemf5.com.unity.webrtc",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.test-framework": "1.6.0"
-      }
-    },
     "com.unity.2d.animation": {
       "version": "10.1.4",
       "depth": 0,
