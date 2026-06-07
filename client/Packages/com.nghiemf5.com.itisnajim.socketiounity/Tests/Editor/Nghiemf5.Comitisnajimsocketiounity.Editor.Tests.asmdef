@@ -1,0 +1,14 @@
+{
+    "name": "Nghiemf5.Comitisnajimsocketiounity.Editor.Tests",
+    "references": [
+        "Nghiemf5.Comitisnajimsocketiounity.Editor",
+        "Nghiemf5.Comitisnajimsocketiounity"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

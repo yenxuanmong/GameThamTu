@@ -1,0 +1,14 @@
+{
+    "name": "Nghiemf5.Comendelnativewebsocket.Editor.Tests",
+    "references": [
+        "Nghiemf5.Comendelnativewebsocket.Editor",
+        "Nghiemf5.Comendelnativewebsocket"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

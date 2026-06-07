@@ -1,0 +1,11 @@
+{
+    "name": "Nghiemf5.Comunitywebrtc.Tests",
+    "references": [
+        "Nghiemf5.Comunitywebrtc"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

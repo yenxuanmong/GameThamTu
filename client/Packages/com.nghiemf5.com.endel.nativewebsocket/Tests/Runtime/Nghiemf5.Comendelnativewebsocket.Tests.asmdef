@@ -1,0 +1,11 @@
+{
+    "name": "Nghiemf5.Comendelnativewebsocket.Tests",
+    "references": [
+        "Nghiemf5.Comendelnativewebsocket"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

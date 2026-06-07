@@ -1,0 +1,10 @@
+{
+    "name": "Nghiemf5.Comunityinputsystem.Editor",
+    "references": [
+      "Nghiemf5.Comunityinputsystem"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

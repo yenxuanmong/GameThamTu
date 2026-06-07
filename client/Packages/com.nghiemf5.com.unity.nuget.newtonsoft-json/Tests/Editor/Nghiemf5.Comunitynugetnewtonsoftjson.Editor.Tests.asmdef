@@ -1,0 +1,14 @@
+{
+    "name": "Nghiemf5.Comunitynugetnewtonsoftjson.Editor.Tests",
+    "references": [
+        "Nghiemf5.Comunitynugetnewtonsoftjson.Editor",
+        "Nghiemf5.Comunitynugetnewtonsoftjson"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

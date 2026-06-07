@@ -1,0 +1,11 @@
+{
+    "name": "Nghiemf5.Comunityinputsystem.Tests",
+    "references": [
+        "Nghiemf5.Comunityinputsystem"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

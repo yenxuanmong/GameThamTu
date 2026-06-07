@@ -1,0 +1,11 @@
+{
+    "name": "Nghiemf5.Comitisnajimsocketiounity.Tests",
+    "references": [
+        "Nghiemf5.Comitisnajimsocketiounity"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

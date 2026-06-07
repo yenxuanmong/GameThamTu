@@ -1,0 +1,14 @@
+{
+    "name": "Nghiemf5.Comunityrenderpipelinesuniversal.Editor.Tests",
+    "references": [
+        "Nghiemf5.Comunityrenderpipelinesuniversal.Editor",
+        "Nghiemf5.Comunityrenderpipelinesuniversal"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

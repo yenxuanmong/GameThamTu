@@ -1,0 +1,10 @@
+{
+    "name": "Nghiemf5.Comunitywebrtc.Editor",
+    "references": [
+      "Nghiemf5.Comunitywebrtc"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

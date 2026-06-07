@@ -1,0 +1,11 @@
+{
+    "name": "Nghiemf5.Comunitytextmeshpro.Tests",
+    "references": [
+        "Nghiemf5.Comunitytextmeshpro"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

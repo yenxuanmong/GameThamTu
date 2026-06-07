@@ -1,0 +1,10 @@
+{
+    "name": "Nghiemf5.Comunitytextmeshpro.Editor",
+    "references": [
+      "Nghiemf5.Comunitytextmeshpro"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

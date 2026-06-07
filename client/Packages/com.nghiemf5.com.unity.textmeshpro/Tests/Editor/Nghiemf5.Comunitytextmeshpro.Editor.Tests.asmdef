@@ -1,0 +1,14 @@
+{
+    "name": "Nghiemf5.Comunitytextmeshpro.Editor.Tests",
+    "references": [
+        "Nghiemf5.Comunitytextmeshpro.Editor",
+        "Nghiemf5.Comunitytextmeshpro"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

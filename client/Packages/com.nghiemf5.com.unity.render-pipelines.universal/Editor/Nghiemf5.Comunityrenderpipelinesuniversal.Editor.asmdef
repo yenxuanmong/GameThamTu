@@ -1,0 +1,10 @@
+{
+    "name": "Nghiemf5.Comunityrenderpipelinesuniversal.Editor",
+    "references": [
+      "Nghiemf5.Comunityrenderpipelinesuniversal"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}
