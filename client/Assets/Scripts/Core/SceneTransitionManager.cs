@@ -48,12 +48,14 @@ namespace DetectiveRoyale.Core
 
         private IEnumerator Transition(string sceneName, Action preLoad)
         {
-            // Fade out using SendMessage to avoid circular asmdef dependency
+            // Fade out — find FadeTransition and call FadeIn coroutine
             var fadeGo = GameObject.Find("FadeTransition");
             if (fadeGo != null)
-                yield return StartCoroutine(
-                    (IEnumerator)fadeGo.SendMessage("FadeIn",
-                        SendMessageOptions.DontRequireReceiver));
+            {
+                var mono = fadeGo.GetComponent<MonoBehaviour>();
+                if (mono != null)
+                    yield return mono.StartCoroutine("FadeIn");
+            }
 
             // Pre-load action (e.g. set GameSession data)
             preLoad?.Invoke();

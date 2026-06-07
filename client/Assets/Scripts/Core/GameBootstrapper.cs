@@ -40,7 +40,7 @@ namespace DetectiveRoyale.Core
 
         private static T EnsureManager<T>(string goName) where T : MonoBehaviour
         {
-            T existing = FindFirstObjectByType<T>();
+            T existing = FindAnyObjectByType<T>();
             if (existing != null) return existing;
             var go = new GameObject(goName);
             DontDestroyOnLoad(go);

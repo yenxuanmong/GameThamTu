@@ -69,7 +69,11 @@ namespace DetectiveRoyale.Core
                 {
                     var info = new FileInfo(_logFilePath);
                     if (info.Length > 1_000_000)
-                        File.Move(_logFilePath, _logFilePath + ".bak", overwrite: true);
+                    {
+                        if (File.Exists(_logFilePath + ".bak"))
+                            File.Delete(_logFilePath + ".bak");
+                        File.Move(_logFilePath, _logFilePath + ".bak");
+                    }
                 }
 
                 File.AppendAllText(_logFilePath, entry);
