@@ -16,42 +16,26 @@ namespace DetectiveRoyale.Core
             _initialized = true;
             DontDestroyOnLoad(gameObject);
 
-            // Core singletons
+            // Core singletons (all in DetectiveRoyale.Core assembly)
             EnsureManager<UnityMainThreadDispatcher>("Dispatcher");
             EnsureManager<CoroutineRunner>("CoroutineRunner");
             EnsureManager<AuthState>("AuthState");
             EnsureManager<ApiClient>("ApiClient");
             EnsureManager<SocketManager>("SocketManager");
             EnsureManager<SceneLoader>("SceneLoader");
+            EnsureManager<SceneTransitionManager>("SceneTransitionManager");
             EnsureManager<LocalizationManager>("LocalizationManager");
-
-            // Auth
-            EnsureManager<Authentication.AuthAPI>("AuthAPI");
-
-            // Multiplayer
-            EnsureManager<Multiplayer.NetworkManager>("NetworkManager");
-            EnsureManager<Multiplayer.RoomManager>("RoomManager");
-            EnsureManager<Multiplayer.ReconnectManager>("ReconnectManager");
-
-            // Audio
             EnsureManager<AudioManager>("AudioManager");
             EnsureManager<SceneAudioController>("SceneAudioController");
-
-            // UI globals
-            EnsureManager<UI.NotificationToast>("NotificationToast");
-            EnsureManager<UI.LoadingScreen>("LoadingScreen");
-            EnsureManager<UI.FadeTransition>("FadeTransition");
-            EnsureManager<UI.ConfirmDialog>("ConfirmDialog");
-            EnsureManager<UI.PasswordInputDialog>("PasswordInputDialog");
-            EnsureManager<UI.TooltipSystem>("TooltipSystem");
-
-            // Version check
             EnsureManager<VersionChecker>("VersionChecker");
-
-            // Input
             EnsureManager<InputManager>("InputManager");
+            EnsureManager<ScreenshotManager>("ScreenshotManager");
+            EnsureManager<ClientErrorHandler>("ClientErrorHandler");
 
-            Debug.Log("[Bootstrapper] All core managers initialised");
+            // Other managers (different assemblies) are initialised by their
+            // own scene GameObjects — see SETUP.md for scene-by-scene setup.
+
+            Debug.Log("[Bootstrapper] Core managers initialised");
         }
 
         private static T EnsureManager<T>(string goName) where T : MonoBehaviour

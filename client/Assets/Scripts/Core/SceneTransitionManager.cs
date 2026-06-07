@@ -48,18 +48,18 @@ namespace DetectiveRoyale.Core
 
         private IEnumerator Transition(string sceneName, Action preLoad)
         {
-            // Fade out
-            var fade = UI.FadeTransition.Instance;
-            if (fade != null)
-                yield return StartCoroutine(fade.FadeIn());
+            // Fade out using SendMessage to avoid circular asmdef dependency
+            var fadeGo = GameObject.Find("FadeTransition");
+            if (fadeGo != null)
+                yield return StartCoroutine(
+                    (IEnumerator)fadeGo.SendMessage("FadeIn",
+                        SendMessageOptions.DontRequireReceiver));
 
             // Pre-load action (e.g. set GameSession data)
             preLoad?.Invoke();
 
             // Load scene
             SceneLoader.Instance.LoadScene(sceneName);
-
-            // Fade in handled by SceneLoader/FadeTransition OnSceneLoaded
         }
     }
 }

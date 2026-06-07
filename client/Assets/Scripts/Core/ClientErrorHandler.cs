@@ -47,9 +47,12 @@ namespace DetectiveRoyale.Core
             {
                 UnityMainThreadDispatcher.Instance?.Enqueue(() =>
                 {
-                    UI.NotificationToast.Show(
-                        "An unexpected error occurred. Please restart if issues persist.",
-                        "error", GameConstants.TOAST_ERROR_DURATION);
+                    // Use SendMessage to avoid circular asmdef dependency
+                    var toast = GameObject.Find("NotificationToast");
+                    if (toast != null)
+                        toast.SendMessage("ShowToast",
+                            "An unexpected error occurred. Please restart if issues persist.",
+                            SendMessageOptions.DontRequireReceiver);
                 });
             }
         }

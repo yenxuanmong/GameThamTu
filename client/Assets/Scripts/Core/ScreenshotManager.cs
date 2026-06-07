@@ -54,9 +54,12 @@ namespace DetectiveRoyale.Core
             if (_showFlash)
                 StartCoroutine(ScreenFlash());
 
-            yield return new WaitForSeconds(0.5f); // wait for file to write
+            yield return new WaitForSeconds(0.5f);
             OnScreenshotSaved?.Invoke(path);
-            UI.NotificationToast.Show($"Screenshot saved!", "success");
+            // Use SendMessage to avoid circular asmdef dependency
+            var toast = GameObject.Find("NotificationToast");
+            if (toast != null)
+                toast.SendMessage("ShowToast", "Screenshot saved!", SendMessageOptions.DontRequireReceiver);
         }
 
         private IEnumerator ScreenFlash()
