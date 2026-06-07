@@ -26,24 +26,24 @@ namespace DetectiveRoyale.Core
             EnsureManager<LocalizationManager>("LocalizationManager");
 
             // Auth
-            EnsureManager<AuthAPI>("AuthAPI");
+            EnsureManager<Authentication.AuthAPI>("AuthAPI");
 
             // Multiplayer
-            EnsureManager<NetworkManager>("NetworkManager");
-            EnsureManager<RoomManager>("RoomManager");
-            EnsureManager<ReconnectManager>("ReconnectManager");
+            EnsureManager<Multiplayer.NetworkManager>("NetworkManager");
+            EnsureManager<Multiplayer.RoomManager>("RoomManager");
+            EnsureManager<Multiplayer.ReconnectManager>("ReconnectManager");
 
             // Audio
             EnsureManager<AudioManager>("AudioManager");
             EnsureManager<SceneAudioController>("SceneAudioController");
 
             // UI globals
-            EnsureManager<NotificationToast>("NotificationToast");
-            EnsureManager<LoadingScreen>("LoadingScreen");
-            EnsureManager<FadeTransition>("FadeTransition");
-            EnsureManager<ConfirmDialog>("ConfirmDialog");
-            EnsureManager<PasswordInputDialog>("PasswordInputDialog");
-            EnsureManager<TooltipSystem>("TooltipSystem");
+            EnsureManager<UI.NotificationToast>("NotificationToast");
+            EnsureManager<UI.LoadingScreen>("LoadingScreen");
+            EnsureManager<UI.FadeTransition>("FadeTransition");
+            EnsureManager<UI.ConfirmDialog>("ConfirmDialog");
+            EnsureManager<UI.PasswordInputDialog>("PasswordInputDialog");
+            EnsureManager<UI.TooltipSystem>("TooltipSystem");
 
             // Version check
             EnsureManager<VersionChecker>("VersionChecker");
