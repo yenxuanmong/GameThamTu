@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.endel.nativewebsocket": "1.1.4",
+    "com.itisnajim.socketiounity": "1.0.7",
     "com.unity.ai.navigation": "2.0.12",
     "com.unity.cinemachine": "3.1.4",
     "com.unity.collab-proxy": "2.12.4",
@@ -55,7 +56,8 @@
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
       "scopes": [
-        "com.endel.nativewebsocket"
+        "com.endel.nativewebsocket",
+        "com.itisnajim.socketiounity"
       ]
     }
   ]

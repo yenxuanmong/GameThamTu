@@ -1,7 +1,9 @@
 {
     "name": "DetectiveRoyale.Core",
     "rootNamespace": "DetectiveRoyale.Core",
-    "references": [],
+    "references": [
+        "Unity.Plastic.Newtonsoft.Json"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

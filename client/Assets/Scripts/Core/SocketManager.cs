@@ -1,23 +1,17 @@
 // ============================================
-// SocketManager — Socket.IO client wrapper
-// Uses NativeWebSocket + manual Socket.IO protocol (engine.io v4)
-// Or use the SocketIOUnity package if available in project
+// SocketManager — Socket.IO v4 client (SocketIOUnity)
+// Package: com.itisnajim.socketiounity (OpenUPM)
 // ============================================
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DetectiveRoyale.Core
 {
-    /// <summary>
-    /// Lightweight Socket.IO v4 client.
-    /// Requires: NativeWebSocket package  (com.endel.nativewebsocket)
-    /// OR SocketIOUnity (itisnajim.socketiounity) — adjust accordingly.
-    /// This implementation uses SocketIOUnity conventions.
-    /// </summary>
     public class SocketManager : MonoBehaviour
     {
         public static SocketManager Instance { get; private set; }
@@ -42,9 +36,8 @@ namespace DetectiveRoyale.Core
         private bool _isConnected;
         public bool IsConnected => _isConnected;
 
-        // ---- Internal: SocketIOUnity client ----
-        // Uncomment and adapt if using SocketIOUnity package:
-        // private SocketIOClient.SocketIO _socket;
+        // ---- SocketIOUnity client ----
+        private SocketIOClient.SocketIO _socket;
 
         void Awake()
         {
@@ -53,13 +46,22 @@ namespace DetectiveRoyale.Core
             DontDestroyOnLoad(gameObject);
         }
 
+        void OnDestroy()
+        {
+            if (_socket != null)
+            {
+                _socket.Dispose();
+                _socket = null;
+            }
+        }
+
         // ============================================
-        // Connect
+        // Connect / Disconnect
         // ============================================
 
         public void Connect()
         {
-            if (_isConnected) return;
+            if (_isConnected || _socket != null) return;
             StartCoroutine(ConnectCoroutine());
         }
 
@@ -68,35 +70,74 @@ namespace DetectiveRoyale.Core
             string token = AuthState.Instance?.AccessToken;
             if (string.IsNullOrEmpty(token))
             {
-                Debug.LogWarning("[SocketManager] No token — cannot connect");
+                Debug.LogWarning("[SocketManager] No access token — cannot connect");
                 yield break;
             }
 
-            // ----- SocketIOUnity implementation -----
-            // var uri = new Uri(GameConfig.Instance.SocketUrl);
-            // _socket = new SocketIOClient.SocketIO(uri, new SocketIOClient.SocketIOOptions
-            // {
-            //     Transport    = SocketIOClient.Transport.TransportProtocol.WebSocket,
-            //     Auth         = new { token = token }
-            // });
-            // RegisterHandlers();
-            // yield return _socket.ConnectAsync().AsCoroutine();
-            // _isConnected = true;
-            // OnConnected?.Invoke();
+            string url = GameConfig.Instance.SocketUrl;
+            Debug.Log($"[SocketManager] Connecting to {url}");
 
-            // ----- Stub until Socket.IO package is installed -----
-            Debug.Log($"[SocketManager] Connecting to {GameConfig.Instance.SocketUrl}");
-            yield return new WaitForSeconds(0.5f);
-            _isConnected = true;
-            OnConnected?.Invoke();
-            Debug.Log("[SocketManager] Connected (stub)");
+            _socket = new SocketIOClient.SocketIO(url, new SocketIOClient.SocketIOOptions
+            {
+                Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
+                Auth      = new Dictionary<string, string> { { "token", token } },
+                ReconnectionAttempts = GameConfig.Instance.SocketMaxReconnects,
+                ReconnectionDelay    = (int)(GameConfig.Instance.SocketReconnectDelay * 1000),
+            });
+
+            RegisterHandlers();
+
+            bool done  = false;
+            bool error = false;
+
+            _socket.OnConnected += (_, __) =>
+            {
+                _isConnected = true;
+                done = true;
+                UnityMainThreadDispatcher.Instance.Enqueue(() => OnConnected?.Invoke());
+                Debug.Log("[SocketManager] Connected ✅");
+            };
+
+            _socket.OnDisconnected += (_, reason) =>
+            {
+                _isConnected = false;
+                UnityMainThreadDispatcher.Instance.Enqueue(() => OnDisconnected?.Invoke());
+                Debug.LogWarning($"[SocketManager] Disconnected: {reason}");
+            };
+
+            _socket.OnError += (_, err) =>
+            {
+                error = true;
+                done  = true;
+                Debug.LogError($"[SocketManager] Connection error: {err}");
+            };
+
+            // Fire-and-forget async connect
+            _ = _socket.ConnectAsync();
+
+            // Wait up to 10 seconds for connection
+            float elapsed = 0f;
+            while (!done && elapsed < 10f)
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            if (error || !_isConnected)
+            {
+                Debug.LogError("[SocketManager] Failed to connect — disposing socket");
+                _socket?.Dispose();
+                _socket = null;
+            }
         }
 
         public void Disconnect()
         {
-            if (!_isConnected) return;
-            // _socket?.DisconnectAsync();
-            _isConnected = false;
+            if (!_isConnected && _socket == null) return;
+            _ = _socket?.DisconnectAsync();
+            _socket?.Dispose();
+            _socket        = null;
+            _isConnected   = false;
             OnDisconnected?.Invoke();
         }
 
@@ -106,99 +147,124 @@ namespace DetectiveRoyale.Core
 
         public void Emit(string eventName, object data = null)
         {
-            if (!_isConnected)
+            if (!_isConnected || _socket == null)
             {
                 Debug.LogWarning($"[SocketManager] Cannot emit '{eventName}' — not connected");
                 return;
             }
-            string json = data != null ? JsonUtility.ToJson(data) : "{}";
-            Debug.Log($"[SocketManager] Emit → {eventName}: {json}");
-            // _socket.EmitAsync(eventName, data);
+
+            if (data == null)
+                _ = _socket.EmitAsync(eventName);
+            else
+                _ = _socket.EmitAsync(eventName, data);
         }
 
         // ---- Room ----
-        public void CreateRoom(object settings) => Emit(ClientEvent.RoomCreate, new { settings });
-        public void JoinRoom(string roomId, string password = null) =>
-            Emit(ClientEvent.RoomJoin, new { roomId, password });
-        public void LeaveRoom(string roomId) =>
-            Emit(ClientEvent.RoomLeave, new { roomId });
-        public void ReadyUp(string roomId) =>
-            Emit(ClientEvent.RoomReady, new { roomId });
-        public void SendRoomChat(string roomId, string message) =>
-            Emit(ClientEvent.RoomChat, new { roomId, message });
+        public void CreateRoom(object settings)
+            => Emit(ClientEvent.RoomCreate, new { settings });
+
+        public void JoinRoom(string roomId, string password = null)
+            => Emit(ClientEvent.RoomJoin, new { roomId, password });
+
+        public void LeaveRoom(string roomId)
+            => Emit(ClientEvent.RoomLeave, new { roomId });
+
+        public void ReadyUp(string roomId)
+            => Emit(ClientEvent.RoomReady, new { roomId });
+
+        public void SendRoomChat(string roomId, string message)
+            => Emit(ClientEvent.RoomChat, new { roomId, message });
 
         // ---- Queue ----
-        public void JoinQueue(string difficulty, string region = null) =>
-            Emit(ClientEvent.QueueJoin, new { difficulty, region });
-        public void LeaveQueue() => Emit(ClientEvent.QueueLeave);
+        public void JoinQueue(string difficulty, string region = null)
+            => Emit(ClientEvent.QueueJoin, new { difficulty, region });
+
+        public void LeaveQueue()
+            => Emit(ClientEvent.QueueLeave);
 
         // ---- Match ----
-        public void SubmitConclusion(string matchId, DetectiveRoyale.Core.Models.ConclusionPayload conclusion) =>
-            Emit(ClientEvent.MatchSubmitConclusion, new { matchId, conclusion });
-        public void RequestHint(string matchId) =>
-            Emit(ClientEvent.MatchRequestHint, new { matchId });
+        public void SubmitConclusion(string matchId, DetectiveRoyale.Core.Models.ConclusionPayload conclusion)
+            => Emit(ClientEvent.MatchSubmitConclusion, new { matchId, conclusion });
+
+        public void RequestHint(string matchId)
+            => Emit(ClientEvent.MatchRequestHint, new { matchId });
 
         // ---- Investigation ----
-        public void ExamineEvidence(string matchId, string evidenceId) =>
-            Emit(ClientEvent.InvestigationExamineEvidence, new { matchId, evidenceId });
-        public void InterrogateWitness(string matchId, string witnessId, string message) =>
-            Emit(ClientEvent.InvestigationInterrogateWitness, new { matchId, witnessId, message });
-        public void AddNote(string matchId, string note, string relatedId = null) =>
-            Emit(ClientEvent.InvestigationAddNote, new { matchId, note, relatedId });
-        public void SendEmote(string matchId, string emoteKey) =>
-            Emit(ClientEvent.InvestigationEmote, new { matchId, emote = emoteKey });
+        public void ExamineEvidence(string matchId, string evidenceId)
+            => Emit(ClientEvent.InvestigationExamineEvidence, new { matchId, evidenceId });
+
+        public void InterrogateWitness(string matchId, string witnessId, string message)
+            => Emit(ClientEvent.InvestigationInterrogateWitness, new { matchId, witnessId, message });
+
+        public void AddNote(string matchId, string note, string relatedId = null)
+            => Emit(ClientEvent.InvestigationAddNote, new { matchId, note, relatedId });
+
+        public void SendEmote(string matchId, string emoteKey)
+            => Emit(ClientEvent.InvestigationEmote, new { matchId, emote = emoteKey });
 
         // ---- Voice ----
-        public void JoinVoice(string matchId) =>
-            Emit(ClientEvent.VoiceJoin, new { matchId });
-        public void LeaveVoice(string matchId) =>
-            Emit(ClientEvent.VoiceLeave, new { matchId });
-        public void SetVoiceMute(string matchId, bool muted) =>
-            Emit(ClientEvent.VoiceMute, new { matchId, muted });
-        public void SendVoiceOffer(string matchId, string targetId, string sdp) =>
-            Emit(ClientEvent.VoiceOffer, new { matchId, targetId, sdp });
-        public void SendVoiceAnswer(string matchId, string targetId, string sdp) =>
-            Emit(ClientEvent.VoiceAnswer, new { matchId, targetId, sdp });
-        public void SendIceCandidate(string matchId, string targetId, string candidate) =>
-            Emit(ClientEvent.VoiceIce, new { matchId, targetId, candidate });
+        public void JoinVoice(string matchId)
+            => Emit(ClientEvent.VoiceJoin, new { matchId });
+
+        public void LeaveVoice(string matchId)
+            => Emit(ClientEvent.VoiceLeave, new { matchId });
+
+        public void SetVoiceMute(string matchId, bool muted)
+            => Emit(ClientEvent.VoiceMute, new { matchId, muted });
+
+        public void SendVoiceOffer(string matchId, string targetId, string sdp)
+            => Emit(ClientEvent.VoiceOffer, new { matchId, targetId, sdp });
+
+        public void SendVoiceAnswer(string matchId, string targetId, string sdp)
+            => Emit(ClientEvent.VoiceAnswer, new { matchId, targetId, sdp });
+
+        public void SendIceCandidate(string matchId, string targetId, string candidate)
+            => Emit(ClientEvent.VoiceIce, new { matchId, targetId, candidate });
 
         // ============================================
-        // Register server → client event handlers
+        // Server → Client event handlers
         // ============================================
 
         private void RegisterHandlers()
         {
-            // Uncomment when using SocketIOUnity:
-            // _socket.On("room:joined",       r => Dispatch(OnRoomJoined,       r, () => r.GetValue<RoomSocketPayload>()));
-            // _socket.On("room:updated",      r => Dispatch(OnRoomUpdated,      r, () => r.GetValue<RoomSocketPayload>()));
-            // _socket.On("room:countdown",    r => Dispatch(OnRoomCountdown,    r, () => r.GetValue<CountdownPayload>()));
-            // _socket.On("match:started",     r => Dispatch(OnMatchStarted,     r, () => r.GetValue<MatchStartedPayload>()));
-            // _socket.On("match:phase_changed",r => Dispatch(OnPhaseChanged,    r, () => r.GetValue<PhasePayload>()));
-            // _socket.On("match:timer",       r => Dispatch(OnTimerTick,        r, () => r.GetValue<TimerPayload>()));
-            // _socket.On("match:player_submitted", r => Dispatch(OnPlayerSubmitted, r, () => r.GetValue<SubmitPayload>()));
-            // _socket.On("match:ended",       r => Dispatch(OnMatchEnded,       r, () => r.GetValue<MatchEndedPayload>()));
-            // _socket.On("investigation:evidence_found", r => Dispatch(OnEvidenceFound, r, () => r.GetValue<EvidenceFoundPayload>()));
-            // _socket.On("investigation:hint",r => Dispatch(OnHintReceived,     r, () => r.GetValue<HintPayload>()));
-            // _socket.On("npc:response",      r => Dispatch(OnNpcResponse,      r, () => r.GetValue<NPCResponsePayload>()));
-            // _socket.On("error",             r => Dispatch(OnSocketError,      r, () => r.GetValue<SocketErrorPayload>()));
-            // _socket.On("notification",      r => Dispatch(OnNotification,     r, () => r.GetValue<NotificationPayload>()));
+            // ---- Room ----
+            _socket.On(ServerEvent.RoomJoined,    r => Dispatch(OnRoomJoined,    r.GetValue<RoomSocketPayload>()));
+            _socket.On(ServerEvent.RoomUpdated,   r => Dispatch(OnRoomUpdated,   r.GetValue<RoomSocketPayload>()));
+            _socket.On(ServerEvent.RoomCountdown, r => Dispatch(OnRoomCountdown, r.GetValue<CountdownPayload>()));
+
+            // ---- Match ----
+            _socket.On(ServerEvent.MatchStarted,         r => Dispatch(OnMatchStarted,      r.GetValue<MatchStartedPayload>()));
+            _socket.On(ServerEvent.MatchPhaseChanged,    r => Dispatch(OnPhaseChanged,       r.GetValue<PhasePayload>()));
+            _socket.On(ServerEvent.MatchTimer,           r => Dispatch(OnTimerTick,          r.GetValue<TimerPayload>()));
+            _socket.On(ServerEvent.MatchPlayerSubmitted, r => Dispatch(OnPlayerSubmitted,    r.GetValue<SubmitPayload>()));
+            _socket.On(ServerEvent.MatchEnded,           r => Dispatch(OnMatchEnded,         r.GetValue<MatchEndedPayload>()));
+
+            // ---- Investigation ----
+            _socket.On(ServerEvent.InvestigationEvidenceFound, r => Dispatch(OnEvidenceFound, r.GetValue<EvidenceFoundPayload>()));
+            _socket.On(ServerEvent.InvestigationHint,          r => Dispatch(OnHintReceived,  r.GetValue<HintPayload>()));
+
+            // ---- NPC ----
+            _socket.On(ServerEvent.NpcResponse, r => Dispatch(OnNpcResponse, r.GetValue<NPCResponsePayload>()));
+
+            // ---- System ----
+            _socket.On(ServerEvent.Error,        r => Dispatch(OnSocketError,   r.GetValue<SocketErrorPayload>()));
+            _socket.On(ServerEvent.Notification, r => Dispatch(OnNotification,  r.GetValue<NotificationPayload>()));
         }
 
-        private void Dispatch<T>(UnityEvent<T> ev, object raw, Func<T> parse)
+        // ---- Thread-safe dispatch to Unity main thread ----
+        private void Dispatch<T>(UnityEvent<T> ev, T payload)
         {
-            try
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
             {
-                T payload = parse();
-                UnityMainThreadDispatcher.Instance.Enqueue(() => ev?.Invoke(payload));
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"[SocketManager] Dispatch error: {ex.Message}");
-            }
+                try   { ev?.Invoke(payload); }
+                catch (Exception ex) { Debug.LogError($"[SocketManager] Event error: {ex.Message}"); }
+            });
         }
     }
 
-    // ---- Socket payload types ----
+    // ============================================
+    // Socket payload types
+    // ============================================
 
     [Serializable] public class RoomSocketPayload   { public Room room; public string playerId; public string roomId; }
     [Serializable] public class CountdownPayload    { public int seconds; }
