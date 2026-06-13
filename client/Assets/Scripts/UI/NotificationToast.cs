@@ -37,6 +37,9 @@ namespace DetectiveRoyale.UI
                 duration > 0 ? duration : _instance._defaultDuration));
         }
 
+        // Called via SendMessage from Core scripts to avoid circular asmdef
+        public void ShowToast(string message) => Show(message);
+
         private IEnumerator ShowCoroutine(string message, string type, float duration)
         {
             if (_toastPrefab == null || _container == null) yield break;

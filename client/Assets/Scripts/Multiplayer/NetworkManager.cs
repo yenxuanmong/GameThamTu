@@ -23,11 +23,9 @@ namespace DetectiveRoyale.Multiplayer
             AuthState.Instance.OnLogin.AddListener(OnLogin);
             AuthState.Instance.OnLogout.AddListener(OnLogout);
 
-            // Connect if already logged in (e.g. after scene reload)
             if (AuthState.Instance.IsLoggedIn)
                 SocketManager.Instance.Connect();
 
-            // Global socket error → toast
             SocketManager.Instance.OnSocketError.AddListener(OnSocketError);
             SocketManager.Instance.OnNotification.AddListener(OnNotification);
             SocketManager.Instance.OnDisconnected.AddListener(OnDisconnected);
@@ -35,8 +33,11 @@ namespace DetectiveRoyale.Multiplayer
 
         void OnDestroy()
         {
-            if (AuthState.Instance   != null) AuthState.Instance.OnLogin.RemoveListener(OnLogin);
-            if (AuthState.Instance   != null) AuthState.Instance.OnLogout.RemoveListener(OnLogout);
+            if (AuthState.Instance != null)
+            {
+                AuthState.Instance.OnLogin.RemoveListener(OnLogin);
+                AuthState.Instance.OnLogout.RemoveListener(OnLogout);
+            }
             if (SocketManager.Instance != null)
             {
                 SocketManager.Instance.OnSocketError.RemoveListener(OnSocketError);
@@ -48,15 +49,19 @@ namespace DetectiveRoyale.Multiplayer
         private void OnLogin()  => SocketManager.Instance.Connect();
         private void OnLogout() => SocketManager.Instance.Disconnect();
 
-        private void OnSocketError(SocketErrorPayload p) =>
-            NotificationToast.Show(p.message, "error");
+        private void ShowToast(string msg)
+        {
+            var go = GameObject.Find("NotificationToast");
+            if (go != null)
+                go.SendMessage("ShowToast", msg, SendMessageOptions.DontRequireReceiver);
+        }
 
-        private void OnNotification(NotificationPayload p) =>
-            NotificationToast.Show(p.message, p.type);
+        private void OnSocketError(SocketErrorPayload p)   => ShowToast(p.message);
+        private void OnNotification(NotificationPayload p) => ShowToast(p.message);
 
         private void OnDisconnected()
         {
-            NotificationToast.Show("Connection lost — reconnecting...", "warning");
+            ShowToast("Connection lost — reconnecting...");
             Invoke(nameof(TryReconnect), GameConfig.Instance.SocketReconnectDelay);
         }
 

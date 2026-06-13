@@ -199,7 +199,9 @@ namespace DetectiveRoyale.Investigation
         {
             GameSession.HintsRemaining = p.hintsRemaining;
             if (_hintsText) _hintsText.text = $"Hints: {p.hintsRemaining}";
-            UI.NotificationToast.Show(p.hint, "hint");
+            var toast = GameObject.Find("NotificationToast");
+            if (toast != null)
+                toast.SendMessage("ShowToast", p.hint, SendMessageOptions.DontRequireReceiver);
         }
 
         // ============================================
@@ -211,7 +213,12 @@ namespace DetectiveRoyale.Investigation
         public void OnClickHint()
         {
             if (GameSession.HintsRemaining <= 0)
-            { UI.NotificationToast.Show("No hints remaining.", "warning"); return; }
+            {
+                var toast = GameObject.Find("NotificationToast");
+                if (toast != null)
+                    toast.SendMessage("ShowToast", "No hints remaining.", SendMessageOptions.DontRequireReceiver);
+                return;
+            }
             SocketManager.Instance.RequestHint(GameSession.MatchId);
         }
 
