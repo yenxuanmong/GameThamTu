@@ -244,8 +244,66 @@ export async function getRoomPlayers(
 }
 
 // ============================================
-// Delete / close room (host only)
+// Kick player from room (host only)
 // ============================================
+
+export async function kickPlayer(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { playerId: hostId } = (req as AuthenticatedRequest).player;
+    const { roomId, targetPlayerId } = req.params as {
+      roomId: string;
+      targetPlayerId: string;
+    };
+
+    const room = await getRoom(roomId);
+    if (!room) throw new AppError(404, 'Room not found', 'NOT_FOUND');
+
+    // Only host can kick
+    if (room.hostId !== hostId) {
+      throw new AppError(403, 'Only the host can kick players', 'FORBIDDEN');
+    }
+
+    // Cannot kick yourself
+    if (targetPlayerId === hostId) {
+      throw new AppError(400, 'Host cannot kick themselves', 'INVALID_TARGET');
+    }
+
+    // Target must be in the room
+    if (!room.playerIds.includes(targetPlayerId)) {
+      throw new AppError(404, 'Player not in this room', 'PLAYER_NOT_FOUND');
+    }
+
+    // Cannot kick during active match
+    if (room.isInMatch) {
+      throw new AppError(409, 'Cannot kick players during an active match', 'MATCH_IN_PROGRESS');
+    }
+
+    const { room: updatedRoom } = await leaveRoom(roomId, targetPlayerId);
+
+    // Notify via Socket.IO if server is running
+    const io = (global as any).io;
+    if (io) {
+      // Tell the kicked player
+      io.to(`player:${targetPlayerId}`).emit('room:kicked', {
+        roomId,
+        reason: 'Kicked by host',
+      });
+
+      // Update remaining players
+      if (updatedRoom) {
+        io.to(`room:${roomId}`).emit('room:updated', { room: updatedRoom });
+      }
+    }
+
+    res.json({ success: true, message: `Player ${targetPlayerId} was kicked` });
+  } catch (err) {
+    next(err);
+  }
+}
 
 export async function deleteRoom(
   req: Request,

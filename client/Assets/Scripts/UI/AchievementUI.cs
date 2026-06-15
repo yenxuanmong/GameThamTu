@@ -50,7 +50,26 @@ namespace DetectiveRoyale.UI
         private Achievement[] _all;
         private string        _filter = "all";
 
-        void Start() => _panel?.SetActive(false);
+        void Start()
+        {
+            _panel?.SetActive(false);
+            // Listen for real-time achievement unlocks via socket
+            SocketManager.Instance?.OnAchievementUnlocked.AddListener(OnAchievementUnlocked);
+        }
+
+        void OnDestroy()
+        {
+            SocketManager.Instance?.OnAchievementUnlocked.RemoveListener(OnAchievementUnlocked);
+        }
+
+        private void OnAchievementUnlocked(AchievementPayload p)
+        {
+            // Show toast immediately
+            NotificationToast.Show($"\ud83c\udfc6 Achievement unlocked: {p.title}", "success", 5f);
+            // Refresh list if panel is open
+            if (_panel != null && _panel.activeSelf)
+                StartCoroutine(Load());
+        }
 
         // ============================================
         // Open

@@ -114,8 +114,8 @@ namespace DetectiveRoyale.Lobby
         private IEnumerator DoKick(string playerId)
         {
             yield return ApiClient.Instance.Post<System.Object>(
-                $"/rooms/{_currentRoomId}/kick",
-                new KickPlayerBody { playerId = playerId },
+                $"/rooms/{_currentRoomId}/kick/{playerId}",
+                null,
                 _ => UI.NotificationToast.Show("Player kicked.", "info"),
                 err => UI.NotificationToast.Show($"Kick failed: {err}", "error"));
         }

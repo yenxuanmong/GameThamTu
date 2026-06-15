@@ -22,6 +22,7 @@ import {
   resetPasswordValidation,
 } from '../controllers/passwordResetController';
 import { uploadAvatar, deleteAvatar } from '../controllers/uploadController';
+import { getMyAchievements } from '../controllers/achievementController';
 import { requireAuth } from '../middleware/authMiddleware';
 import { authRateLimiter as rateLimiter } from '../middleware/rateLimiter';
 import { avatarUpload } from '../middleware/upload';
@@ -47,5 +48,8 @@ router.post('/logout', requireAuth, logout);
 // ---- Avatar ----
 router.post('/me/avatar', requireAuth, avatarUpload.single('avatar'), uploadAvatar);
 router.delete('/me/avatar', requireAuth, deleteAvatar);
+
+// ---- Achievements ----
+router.get('/me/achievements', requireAuth, getMyAchievements);
 
 export default router;

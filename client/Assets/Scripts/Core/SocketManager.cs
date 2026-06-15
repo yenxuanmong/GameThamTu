@@ -20,6 +20,7 @@ namespace DetectiveRoyale.Core
         public UnityEvent<RoomSocketPayload>    OnRoomJoined        = new();
         public UnityEvent<RoomSocketPayload>    OnRoomUpdated       = new();
         public UnityEvent<CountdownPayload>     OnRoomCountdown     = new();
+        public UnityEvent<KickedPayload>        OnRoomKicked        = new();
         public UnityEvent<MatchStartedPayload>  OnMatchStarted      = new();
         public UnityEvent<PhasePayload>         OnPhaseChanged      = new();
         public UnityEvent<TimerPayload>         OnTimerTick         = new();
@@ -32,6 +33,7 @@ namespace DetectiveRoyale.Core
         public UnityEvent<NotificationPayload>  OnNotification      = new();
         public UnityEvent                       OnConnected         = new();
         public UnityEvent                       OnDisconnected      = new();
+        public UnityEvent<AchievementPayload>   OnAchievementUnlocked = new();
 
         private bool _isConnected;
         public bool IsConnected => _isConnected;
@@ -231,6 +233,7 @@ namespace DetectiveRoyale.Core
             _socket.On(ServerEvent.RoomJoined,    r => Dispatch(OnRoomJoined,    r.GetValue<RoomSocketPayload>()));
             _socket.On(ServerEvent.RoomUpdated,   r => Dispatch(OnRoomUpdated,   r.GetValue<RoomSocketPayload>()));
             _socket.On(ServerEvent.RoomCountdown, r => Dispatch(OnRoomCountdown, r.GetValue<CountdownPayload>()));
+            _socket.On(ServerEvent.RoomKicked,    r => Dispatch(OnRoomKicked,    r.GetValue<KickedPayload>()));
 
             // ---- Match ----
             _socket.On(ServerEvent.MatchStarted,         r => Dispatch(OnMatchStarted,      r.GetValue<MatchStartedPayload>()));
@@ -247,8 +250,9 @@ namespace DetectiveRoyale.Core
             _socket.On(ServerEvent.NpcResponse, r => Dispatch(OnNpcResponse, r.GetValue<NPCResponsePayload>()));
 
             // ---- System ----
-            _socket.On(ServerEvent.Error,        r => Dispatch(OnSocketError,   r.GetValue<SocketErrorPayload>()));
-            _socket.On(ServerEvent.Notification, r => Dispatch(OnNotification,  r.GetValue<NotificationPayload>()));
+            _socket.On(ServerEvent.Error,               r => Dispatch(OnSocketError,          r.GetValue<SocketErrorPayload>()));
+            _socket.On(ServerEvent.Notification,        r => Dispatch(OnNotification,         r.GetValue<NotificationPayload>()));
+            _socket.On(ServerEvent.AchievementUnlocked, r => Dispatch(OnAchievementUnlocked,  r.GetValue<AchievementPayload>()));
         }
 
         // ---- Thread-safe dispatch to Unity main thread ----
@@ -268,6 +272,7 @@ namespace DetectiveRoyale.Core
 
     [Serializable] public class RoomSocketPayload   { public Room room; public string playerId; public string roomId; }
     [Serializable] public class CountdownPayload    { public int seconds; }
+    [Serializable] public class KickedPayload       { public string roomId; public string reason; }
     [Serializable] public class MatchStartedPayload { public string matchId; public string caseId; }
     [Serializable] public class PhasePayload        { public string phase; public int timeRemaining; }
     [Serializable] public class TimerPayload        { public int timeRemaining; }
@@ -278,4 +283,5 @@ namespace DetectiveRoyale.Core
     [Serializable] public class NPCResponsePayload  { public string witnessId; public string message; public string stressLevel; }
     [Serializable] public class SocketErrorPayload  { public string code; public string message; }
     [Serializable] public class NotificationPayload { public string type; public string message; }
+    [Serializable] public class AchievementPayload  { public string achievementId; public string title; public string iconKey; }
 }

@@ -17,6 +17,7 @@ import { globalRateLimiter } from './middleware/rateLimiter';
 import { errorHandler } from './middleware/errorHandler';
 import { initSocketServer } from './server/socket/socketServer';
 import { checkSeasonRotation } from './server/ranking/seasonSystem';
+import { seedAchievements } from './services/achievementService';
 import logger from './utils/logger';
 
 
@@ -117,6 +118,11 @@ async function bootstrap(): Promise<void> {
     // Check season rotation on startup
     await checkSeasonRotation().catch((err) =>
       logger.warn('[App] Season rotation check failed', { err })
+    );
+
+    // Seed achievement definitions
+    await seedAchievements().catch((err) =>
+      logger.warn('[App] Achievement seed failed', { err })
     );
 
     // Schedule season rotation check every 6 hours

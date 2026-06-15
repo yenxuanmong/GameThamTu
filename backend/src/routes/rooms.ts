@@ -8,6 +8,7 @@ import {
   getRoomById,
   createRoomREST,
   getRoomPlayers,
+  kickPlayer,
   deleteRoom,
   createRoomValidation,
 } from '../controllers/roomController';
@@ -26,6 +27,9 @@ router.get('/:roomId/players', getRoomPlayers);
 
 // Create room via REST — authenticated
 router.post('/', requireAuth, createRoomValidation, createRoomREST);
+
+// Kick player — authenticated (host only)
+router.post('/:roomId/kick/:targetPlayerId', requireAuth, kickPlayer);
 
 // Delete room — authenticated (host only)
 router.delete('/:roomId', requireAuth, deleteRoom);

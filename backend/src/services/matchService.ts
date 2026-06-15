@@ -16,6 +16,7 @@ import logger from '../utils/logger';
 import type { FullCase } from '../murder_engine/models/Case';
 import { updatePlayerStats } from '../analytics/playerAnalytics';
 import { applyRpChange } from './rankingService';
+import { checkMatchAchievements } from './achievementService';
 import { RP_CHANGES } from '../utils/constants';
 
 const murderEngine = new MurderEngine();
@@ -299,6 +300,20 @@ export async function finaliseMatch(matchId: string): Promise<Match | null> {
     await updatePlayerStats(score.playerId, score.totalScore, isWin, score.isCorrect, timeTaken);
     await applyRpChange(score.playerId, rpChange, isWin).catch((err) =>
       logger.warn('[MatchService] Failed to apply RP change', { playerId: score.playerId, err })
+    );
+
+    // Check achievements
+    await checkMatchAchievements(score.playerId, matchId).then((unlocked) => {
+      if (unlocked.length > 0) {
+        const io = (global as any).io;
+        if (io) {
+          for (const ach of unlocked) {
+            io.to(`player:${score.playerId}`).emit('achievement:unlocked', ach);
+          }
+        }
+      }
+    }).catch((err) =>
+      logger.warn('[MatchService] Achievement check failed', { playerId: score.playerId, err })
     );
   }
 

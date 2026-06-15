@@ -47,6 +47,7 @@ namespace DetectiveRoyale.Core
         public const string RoomJoined    = "room:joined";
         public const string RoomUpdated   = "room:updated";
         public const string RoomLeft      = "room:left";
+        public const string RoomKicked    = "room:kicked";
         public const string RoomCountdown = "room:countdown";
         public const string RoomChat      = "room:chat";
 
@@ -72,8 +73,9 @@ namespace DetectiveRoyale.Core
         public const string VoiceMuted  = "voice:muted";
 
         // System
-        public const string Error        = "error";
-        public const string Notification = "notification";
-        public const string Pong         = "pong";
+        public const string Error                = "error";
+        public const string Notification         = "notification";
+        public const string Pong                 = "pong";
+        public const string AchievementUnlocked  = "achievement:unlocked";
     }
 }

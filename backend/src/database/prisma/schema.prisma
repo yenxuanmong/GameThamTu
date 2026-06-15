@@ -127,6 +127,7 @@ model Player {
   notebookEntries NotebookEntry[]
   conclusions   PlayerConclusion[]
   scores        MatchScore[]
+  playerAchievements PlayerAchievement[]
 
   @@index([email])
   @@index([username])
@@ -558,4 +559,50 @@ model SeasonLeaderboard {
   @@unique([seasonId, playerId])
   @@index([seasonId, rank])
   @@map("season_leaderboard")
+}
+
+// ============================================
+// ACHIEVEMENTS
+// ============================================
+
+enum AchievementCategory {
+  detective       // solving cases
+  social          // multiplayer / room interactions
+  collector       // evidence gathering
+  master          // high scores
+  veteran         // play count milestones
+  special         // unique / hidden
+}
+
+model AchievementDefinition {
+  id           String              @id  // e.g. "first_solve"
+  title        String
+  description  String
+  category     AchievementCategory
+  iconKey      String              @default("badge_default")
+  maxProgress  Int                 @default(1)  // 1 = binary unlock, >1 = progress
+  isHidden     Boolean             @default(false)
+  isActive     Boolean             @default(true)
+  sortOrder    Int                 @default(0)
+
+  playerAchievements PlayerAchievement[]
+
+  @@map("achievement_definitions")
+}
+
+model PlayerAchievement {
+  id            String    @id @default(uuid())
+  playerId      String
+  player        Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   AchievementDefinition @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  progress      Int       @default(0)
+  unlocked      Boolean   @default(false)
+  unlockedAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([playerId, achievementId])
+  @@index([playerId])
+  @@map("player_achievements")
 }
