@@ -171,15 +171,12 @@ namespace DetectiveRoyale.UI
 
         public static void ShowUnlockToast(Achievement a)
         {
-            NotificationToast.Show($"🏆 Achievement unlocked: {a.title}", "success", 5f);
+            NotificationToast.Show($"\ud83c\udfc6 Achievement unlocked: {a.title}", "success", 5f);
         }
 
         private void ClearList()
         {
-<<<<<<< HEAD
             if (_listContent == null) return;
-=======
->>>>>>> 6b8ce8b273d3571a7432b4fb850889e05f20d6a7
             foreach (Transform t in _listContent) Destroy(t.gameObject);
         }
     }

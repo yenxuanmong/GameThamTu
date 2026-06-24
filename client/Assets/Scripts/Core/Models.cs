@@ -143,14 +143,14 @@ namespace DetectiveRoyale.Core
     [Serializable]
     public class Suspect
     {
-        public string   id;
-        public string   name;
-        public int      age;
-        public string   occupation;
-        public string   backstory;
-        public string   personality;
-        public string   alibi;
-        public string   relationship;  // to victim
+        public string id;
+        public string name;
+        public int    age;
+        public string occupation;
+        public string backstory;
+        public string personality;
+        public string alibi;
+        public string relationship;  // to victim
     }
 
     [Serializable]
@@ -251,16 +251,16 @@ namespace DetectiveRoyale.Core
     [Serializable]
     public class MatchScore
     {
-        public string          playerId;
-        public string          username;
-        public string          avatarUrl;
-        public int             totalScore;
-        public ScoreBreakdown  breakdown;
-        public int             timeBonus;
-        public bool            isCorrect;
-        public int             rank;
-        public int             rpChange;
-        public string          result;    // win | lose | draw
+        public string         playerId;
+        public string         username;
+        public string         avatarUrl;
+        public int            totalScore;
+        public ScoreBreakdown breakdown;
+        public int            timeBonus;
+        public bool           isCorrect;
+        public int            rank;
+        public int            rpChange;
+        public string         result;    // win | lose | draw
     }
 
     [Serializable]
@@ -480,7 +480,7 @@ namespace DetectiveRoyale.Core
 
 namespace DetectiveRoyale.Core.Models
 {
-    [Serializable]
+    [System.Serializable]
     public class ConclusionPayload
     {
         public string killerId;
