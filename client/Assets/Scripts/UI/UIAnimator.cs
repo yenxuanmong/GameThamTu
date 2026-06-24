@@ -24,8 +24,8 @@ namespace DetectiveRoyale.UI
 
         void Awake()
         {
-            _canvasGroup    = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
-            _rectTransform  = GetComponent<RectTransform>();
+            _canvasGroup   = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
+            _rectTransform = GetComponent<RectTransform>();
             if (_rectTransform == null)
             {
                 Debug.LogError("[UIAnimator] No RectTransform found — UIAnimator requires a UI element.", this);
@@ -77,14 +77,14 @@ namespace DetectiveRoyale.UI
                                                 opening ? _originalPosition : new Vector2(Screen.width, 0), d);
                     break;
                 case AnimType.SlideInUp:
-                    // Slide in from bottom → resting position
+                    // Slides in from bottom → resting position
                     yield return SlideCoroutine(opening ? new Vector2(0, -Screen.height) : _originalPosition,
                                                 opening ? _originalPosition : new Vector2(0, -Screen.height), d);
                     break;
                 case AnimType.SlideInDown:
-                    // Slide in from top → resting position
-                    yield return SlideCoroutine(opening ? new Vector2(0,  Screen.height) : _originalPosition,
-                                                opening ? _originalPosition : new Vector2(0,  Screen.height), d);
+                    // Slides in from top → resting position
+                    yield return SlideCoroutine(opening ? new Vector2(0, Screen.height) : _originalPosition,
+                                                opening ? _originalPosition : new Vector2(0, Screen.height), d);
                     break;
                 case AnimType.ScaleBounce:
                     yield return ScaleBounceCoroutine(d);

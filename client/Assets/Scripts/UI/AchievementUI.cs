@@ -176,7 +176,10 @@ namespace DetectiveRoyale.UI
 
         private void ClearList()
         {
+<<<<<<< HEAD
             if (_listContent == null) return;
+=======
+>>>>>>> 6b8ce8b273d3571a7432b4fb850889e05f20d6a7
             foreach (Transform t in _listContent) Destroy(t.gameObject);
         }
     }

@@ -18,7 +18,7 @@ namespace DetectiveRoyale.UI
         [SerializeField] private Image    _fillImage;
 
         [Header("Animation")]
-        [SerializeField] private float _animDuration   = 0.8f;
+        [SerializeField] private float _animDuration    = 0.8f;
         [SerializeField] private bool  _animateOnEnable = false;
 
         [Header("Colors")]
@@ -47,19 +47,17 @@ namespace DetectiveRoyale.UI
 
         /// <summary>
         /// Full setup: title, raw value and its maximum.
-        /// Handles max-normalisation internally so callers never need to
-        /// pre-divide.  Optional format string is forwarded to the label
-        /// (e.g. "{0:F0} pts").
+        /// Handles max-normalisation internally so callers never need to pre-divide.
+        /// Optional format string is forwarded to the label (e.g. "{0:F0} pts").
         /// </summary>
         public void Setup(string title, float value, float max = 1f, string format = null)
         {
             if (_titleLabel) _titleLabel.text = title;
-            // Don't call SetValue here to avoid double-normalising max
             SetValue(value, max, format);
         }
 
         /// <summary>
-        /// Update the bar value.  Pass the raw value and its maximum;
+        /// Update the bar value. Pass the raw value and its maximum;
         /// normalisation to 0–1 is done here.
         /// </summary>
         public void SetValue(float value, float max = 1f, string format = null)

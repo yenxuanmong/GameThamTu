@@ -12,10 +12,10 @@ using DetectiveRoyale.Authentication;
 
 namespace DetectiveRoyale.UI
 {
-    [Serializable] public class UpdateProfileBody  { public string avatarUrl; }
-    [Serializable] public class PreferencesBody    { public string preferredDifficulty; public bool enableVoiceChat; public bool enableNotifications; }
-    [Serializable] public class ChangePassBody     { public string currentPassword; public string newPassword; }
-    [Serializable] public class UpdateResponse     { public bool success; }
+    [Serializable] public class UpdateProfileBody { public string avatarUrl; }
+    [Serializable] public class PreferencesBody   { public string preferredDifficulty; public bool enableVoiceChat; public bool enableNotifications; }
+    [Serializable] public class ChangePassBody    { public string currentPassword; public string newPassword; }
+    [Serializable] public class UpdateResponse    { public bool success; }
 
     public class ProfileUI : MonoBehaviour
     {
@@ -109,7 +109,7 @@ namespace DetectiveRoyale.UI
                 _streakText.text  = s >= 0 ? $"🔥 {s}-win streak" : $"❄ {-s}-loss streak";
                 _streakText.color = s >= 0 ? Color.green : new Color(0.4f, 0.8f, 1f);
             }
-            if (_matchesText)     _matchesText.text     = $"{p.stats?.totalMatches ?? 0} matches";
+            if (_matchesText)       _matchesText.text       = $"{p.stats?.totalMatches ?? 0} matches";
             if (_perfectSolvesText) _perfectSolvesText.text = $"{p.stats?.perfectSolves ?? 0} perfect solves";
 
             float wr = p.stats != null && p.stats.totalMatches > 0
@@ -122,8 +122,8 @@ namespace DetectiveRoyale.UI
                 int idx = Array.IndexOf(DifficultyOptions, p.preferences.preferredDifficulty);
                 _prefDifficultyDropdown.value = Mathf.Max(0, idx);
             }
-            if (_voiceChatToggle      && p.preferences != null) _voiceChatToggle.isOn      = p.preferences.enableVoiceChat;
-            if (_notificationsToggle  && p.preferences != null) _notificationsToggle.isOn  = p.preferences.enableNotifications;
+            if (_voiceChatToggle     && p.preferences != null) _voiceChatToggle.isOn     = p.preferences.enableVoiceChat;
+            if (_notificationsToggle && p.preferences != null) _notificationsToggle.isOn = p.preferences.enableNotifications;
 
             // Avatar
             if (!string.IsNullOrEmpty(p.avatarUrl))
@@ -153,7 +153,7 @@ namespace DetectiveRoyale.UI
             bool   voice   = _voiceChatToggle     && _voiceChatToggle.isOn;
             bool   notifs  = _notificationsToggle && _notificationsToggle.isOn;
 
-            if (_savePrefsBtn) _savePrefsBtn.interactable = false;
+            if (_savePrefsBtn)   _savePrefsBtn.interactable = false;
             if (_prefsSavedText) _prefsSavedText.text = "";
 
             StartCoroutine(SavePreferences(diff, voice, notifs));
@@ -163,21 +163,21 @@ namespace DetectiveRoyale.UI
         {
             var body = new { preferences = new PreferencesBody
             {
-                preferredDifficulty   = difficulty,
-                enableVoiceChat       = voice,
-                enableNotifications   = notifs
+                preferredDifficulty = difficulty,
+                enableVoiceChat     = voice,
+                enableNotifications = notifs
             }};
 
             yield return ApiClient.Instance.Patch<UpdateResponse>("/auth/me", body,
                 _ =>
                 {
-                    if (_prefsSavedText)  _prefsSavedText.text = "✓ Saved";
-                    if (_savePrefsBtn)    _savePrefsBtn.interactable = true;
+                    if (_prefsSavedText) _prefsSavedText.text = "✓ Saved";
+                    if (_savePrefsBtn)   _savePrefsBtn.interactable = true;
                     NotificationToast.Show("Preferences saved.", "success");
                 },
                 err =>
                 {
-                    if (_savePrefsBtn)   _savePrefsBtn.interactable = true;
+                    if (_savePrefsBtn) _savePrefsBtn.interactable = true;
                     NotificationToast.Show($"Save failed: {err}", "error");
                 });
         }
@@ -291,7 +291,6 @@ namespace DetectiveRoyale.UI
             {
                 if (_uploadStatusText) _uploadStatusText.text = "✓ Avatar updated";
                 NotificationToast.Show("Avatar updated.", "success");
-                // Reload profile to show new avatar
                 StartCoroutine(LoadProfile());
             }
             else
