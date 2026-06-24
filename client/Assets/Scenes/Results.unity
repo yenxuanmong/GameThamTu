@@ -1,0 +1,203 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_SceneGUID: 00000000000000000000000000000005
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 9
+  m_Fog: 0
+  m_AmbientSkyColor: {r: 0.05, g: 0.05, b: 0.08, a: 1}
+  m_AmbientIntensity: 1
+  m_AmbientMode: 0
+  m_SkyboxMaterial: {fileID: 0}
+--- !u!157 &3
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 12
+  m_GIWorkflowMode: 1
+  m_GISettings:
+    serializedVersion: 2
+    m_BounceScale: 1
+    m_IndirectOutputScale: 1
+    m_AlbedoBoost: 1
+    m_EnableBakedLightmaps: 0
+    m_EnableRealtimeLightmaps: 0
+# ============================================================
+# GameBootstrapper
+# ============================================================
+--- !u!1 &500000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_Component:
+  - component: {fileID: 500000002}
+  - component: {fileID: 500000003}
+  m_Layer: 0
+  m_Name: GameBootstrapper
+  m_IsActive: 1
+--- !u!4 &500000002
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &500000003
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: gamebootstrapper_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Results Canvas
+# ============================================================
+--- !u!1 &500000010
+GameObject:
+  m_Component:
+  - component: {fileID: 500000011}
+  - component: {fileID: 500000012}
+  - component: {fileID: 500000013}
+  - component: {fileID: 500000014}
+  - component: {fileID: 500000015}
+  m_Layer: 5
+  m_Name: ResultsCanvas
+  m_TagString: UICanvas
+  m_IsActive: 1
+--- !u!4 &500000011
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!223 &500000012
+Canvas:
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_TargetDisplay: 0
+  m_PixelPerfect: 0
+  m_SortingOrder: 0
+--- !u!114 &500000013
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: resultui_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  # Inspector refs:
+  # _matchResultText, _winnerNameText, _victoryBanner, _defeatBanner
+  # _scoreListContent, _scoreItemPrefab
+  # _killerText, _motiveText, _weaponText, _locationText, _methodText, _narrativeText
+  # _myScoreText, _myRankText, _rpChangeText, _correctBadge, _incorrectBadge
+  # _playAgainBtn, _mainMenuBtn, _loadingPanel
+--- !u!114 &500000014
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: matchstats_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &500000015
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: notificationtoast_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Achievement UI (shown on result)
+# ============================================================
+--- !u!1 &500000020
+GameObject:
+  m_Component:
+  - component: {fileID: 500000021}
+  - component: {fileID: 500000022}
+  m_Layer: 5
+  m_Name: AchievementCanvas
+  m_IsActive: 1
+--- !u!4 &500000021
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &500000022
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: achievementui_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Main Camera
+# ============================================================
+--- !u!1 &500000030
+GameObject:
+  m_Component:
+  - component: {fileID: 500000031}
+  - component: {fileID: 500000032}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_IsActive: 1
+--- !u!4 &500000031
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!20 &500000032
+Camera:
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.03, g: 0.03, b: 0.05, a: 1}
+  m_NearClipPlane: 0.3
+  m_FarClipPlane: 1000
+  m_Fov: 60
+  m_Depth: -1
+  m_HDR: 1
+  m_AllowMSAA: 1
+# ============================================================
+# Particle system — victory confetti
+# ============================================================
+--- !u!1 &500000040
+GameObject:
+  m_Component:
+  - component: {fileID: 500000041}
+  - component: {fileID: 500000042}
+  m_Layer: 0
+  m_Name: VictoryConfetti
+  m_IsActive: 0
+--- !u!4 &500000041
+Transform:
+  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!199 &500000042
+ParticleSystem:
+  m_ObjectHideFlags: 0
+  serializedVersion: 6
+  lengthInSec: 5
+  simulationSpeed: 1
+  stopAction: 0
+  looping: 0
+  prewarm: 0
+  playOnAwake: 1
+  InitialModule:
+    enabled: 1
+    startLifetime:
+      serializedVersion: 2
+      minMaxState: 0
+      scalar: 3
+    startSpeed:
+      serializedVersion: 2
+      minMaxState: 0
+      scalar: 5
+    startSize:
+      serializedVersion: 2
+      minMaxState: 0
+      scalar: 0.2
+    startRotation:
+      serializedVersion: 2
+      minMaxState: 0
+      scalar: 0
+    startColor:
+      serializedVersion: 2
+      minMaxState: 1
+      minColor: {r: 1, g: 0.8, b: 0, a: 1}
+      maxColor: {r: 0.2, g: 0.8, b: 1, a: 1}
+    gravityModifier: 0.5
+    maxNumParticles: 200

@@ -1,0 +1,192 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_SceneGUID: 00000000000000000000000000000003
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 9
+  m_Fog: 0
+  m_AmbientSkyColor: {r: 0.08, g: 0.08, b: 0.1, a: 1}
+  m_AmbientIntensity: 1
+  m_AmbientMode: 0
+  m_SkyboxMaterial: {fileID: 0}
+--- !u!157 &3
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 12
+  m_GIWorkflowMode: 1
+  m_GISettings:
+    serializedVersion: 2
+    m_BounceScale: 1
+    m_IndirectOutputScale: 1
+    m_AlbedoBoost: 1
+    m_EnableBakedLightmaps: 0
+    m_EnableRealtimeLightmaps: 0
+--- !u!196 &4
+NavMeshSettings:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    serializedVersion: 2
+    agentTypeID: 0
+    agentRadius: 0.5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: 0.4
+# ============================================================
+# GameBootstrapper — initialises all singleton managers
+# ============================================================
+--- !u!1 &300000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_Component:
+  - component: {fileID: 300000002}
+  - component: {fileID: 300000003}
+  m_Layer: 0
+  m_Name: GameBootstrapper
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &300000002
+Transform:
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &300000003
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: gamebootstrapper_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Main Canvas — holds all Lobby UI panels
+# ============================================================
+--- !u!1 &300000010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_Component:
+  - component: {fileID: 300000011}
+  - component: {fileID: 300000012}
+  - component: {fileID: 300000013}
+  - component: {fileID: 300000014}
+  - component: {fileID: 300000015}
+  m_Layer: 5
+  m_Name: LobbyCanvas
+  m_TagString: UICanvas
+  m_IsActive: 1
+--- !u!4 &300000011
+Transform:
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!223 &300000012
+Canvas:
+  m_ObjectHideFlags: 0
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_TargetDisplay: 0
+  m_PixelPerfect: 1
+  m_ReceivesEvents: 1
+--- !u!114 &300000013
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: lobbymanager_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# LobbyManager fields wired in Inspector:
+# _mainPanel, _roomListPanel, _createRoomPanel, _roomLobbyPanel, _matchmakingPanel
+# _usernameText, _tierText, _pointsText
+# _roomListContent, _roomListItemPrefab, _difficultyFilter, _refreshBtn
+# _roomNameInput, _createDifficulty, _maxPlayersSlider, _maxPlayersLabel
+# _privateToggle, _passwordInput
+# _roomNameLabel, _roomDifficultyLabel, _playerListContent, _playerSlotPrefab
+# _readyBtn, _readyBtnText, _leaveRoomBtn, _countdownText
+# _queueStatusText, _queueDifficulty, _cancelQueueBtn
+--- !u!114 &300000014
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: rankingui_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &300000015
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: notificationtoast_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# PasswordInputDialog — modal for password rooms
+# ============================================================
+--- !u!1 &300000020
+GameObject:
+  m_Component:
+  - component: {fileID: 300000021}
+  - component: {fileID: 300000022}
+  m_Layer: 5
+  m_Name: PasswordInputDialog
+  m_IsActive: 1
+--- !u!4 &300000021
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &300000022
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: passwordinputdialog_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# ChatUI
+# ============================================================
+--- !u!1 &300000030
+GameObject:
+  m_Component:
+  - component: {fileID: 300000031}
+  - component: {fileID: 300000032}
+  m_Layer: 5
+  m_Name: ChatUI
+  m_IsActive: 1
+--- !u!4 &300000031
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &300000032
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: chatui_guid, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+# ============================================================
+# Main Camera
+# ============================================================
+--- !u!1 &300000040
+GameObject:
+  m_Component:
+  - component: {fileID: 300000041}
+  - component: {fileID: 300000042}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_IsActive: 1
+--- !u!4 &300000041
+Transform:
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!20 &300000042
+Camera:
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.05, g: 0.05, b: 0.07, a: 1}
+  m_NearClipPlane: 0.3
+  m_FarClipPlane: 1000
+  m_Fov: 60
+  m_Depth: -1
+  m_HDR: 1
+  m_AllowMSAA: 1

@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: volume_profile_guid, type: 3}
+  m_Name: PostProcessVolume_Investigation
+  m_EditorClassIdentifier: 
+  components:
+  # Vignette — noir atmosphere
+  - m_Active: 1
+    intensity:
+      m_OverrideState: 1
+      m_Value: 0.35
+    color:
+      m_OverrideState: 1
+      m_Value: {r: 0, g: 0, b: 0, a: 1}
+    rounded:
+      m_OverrideState: 0
+      m_Value: 0
+    smoothness:
+      m_OverrideState: 1
+      m_Value: 0.6
+  # Color Adjustments — desaturated, slight cool tint
+  - m_Active: 1
+    postExposure:
+      m_OverrideState: 1
+      m_Value: -0.2
+    contrast:
+      m_OverrideState: 1
+      m_Value: 15
+    colorFilter:
+      m_OverrideState: 1
+      m_Value: {r: 0.9, g: 0.92, b: 1.0, a: 1}
+    hueShift:
+      m_OverrideState: 0
+      m_Value: 0
+    saturation:
+      m_OverrideState: 1
+      m_Value: -20
+  # Depth of Field — subtle focus blur
+  - m_Active: 1
+    mode:
+      m_OverrideState: 1
+      m_Value: 0
+    gaussianStart:
+      m_OverrideState: 1
+      m_Value: 8
+    gaussianEnd:
+      m_OverrideState: 1
+      m_Value: 20
+    gaussianMaxRadius:
+      m_OverrideState: 1
+      m_Value: 0.5
+  # Bloom — very subtle
+  - m_Active: 1
+    threshold:
+      m_OverrideState: 1
+      m_Value: 1.1
+    intensity:
+      m_OverrideState: 1
+      m_Value: 0.15
+    scatter:
+      m_OverrideState: 1
+      m_Value: 0.7
