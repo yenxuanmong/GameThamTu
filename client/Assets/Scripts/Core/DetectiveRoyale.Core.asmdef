@@ -1,0 +1,17 @@
+{
+    "name": "DetectiveRoyale.Core",
+    "rootNamespace": "DetectiveRoyale.Core",
+    "references": [
+        "Unity.Plastic.Newtonsoft.Json",
+        "SocketIOUnityAssembly"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

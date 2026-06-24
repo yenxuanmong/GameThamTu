@@ -1,0 +1,33 @@
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Required for Unity WebGL SharedArrayBuffer / multithreading
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Embedder-Policy = "require-corp"
+
+[[headers]]
+  for = "*.wasm"
+  [headers.values]
+    Content-Type = "application/wasm"
+
+[[headers]]
+  for = "*.js.gz"
+  [headers.values]
+    Content-Encoding = "gzip"
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "*.wasm.gz"
+  [headers.values]
+    Content-Encoding = "gzip"
+    Content-Type = "application/wasm"
+
+[[headers]]
+  for = "*.data.gz"
+  [headers.values]
+    Content-Encoding = "gzip"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

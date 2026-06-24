@@ -1,0 +1,12 @@
+﻿<Solution>
+  <Project Path="DetectiveRoyale.UI.csproj" />
+  <Project Path="DetectiveRoyale.Authentication.csproj" />
+  <Project Path="DetectiveRoyale.Analytics.csproj" />
+  <Project Path="DetectiveRoyale.Core.csproj" />
+  <Project Path="DetectiveRoyale.Lobby.csproj" />
+  <Project Path="DetectiveRoyale.NPC.csproj" />
+  <Project Path="DetectiveRoyale.Multiplayer.csproj" />
+  <Project Path="DetectiveRoyale.Investigation.csproj" />
+  <Project Path="DetectiveRoyale.Ranking.csproj" />
+  <Project Path="DetectiveRoyale.Editor.csproj" />
+</Solution>

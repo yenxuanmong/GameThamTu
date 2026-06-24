@@ -1,0 +1,20 @@
+{
+    "name": "DetectiveRoyale.UI",
+    "rootNamespace": "DetectiveRoyale.UI",
+    "references": [
+        "DetectiveRoyale.Core",
+        "DetectiveRoyale.Authentication",
+        "DetectiveRoyale.Investigation",
+        "DetectiveRoyale.Multiplayer",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

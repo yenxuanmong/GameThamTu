@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Evidence
+  - Witness
+  - Suspect
+  - Player
+  - Interactable
+  - UICanvas
+  - Clue
+  - CrimeScene
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Evidence
+  - Witness
+  - CrimeScene
+  - InteractableObject
+  m_SortingLayers:
+  - uniqueID: 0
+    name: Default
+    userID: 0
+  - uniqueID: 1
+    name: Background
+    userID: 1
+  - uniqueID: 2
+    name: Midground
+    userID: 2
+  - uniqueID: 3
+    name: Foreground
+    userID: 3
+  - uniqueID: 4
+    name: UI
+    userID: 4
+  - uniqueID: 5
+    name: Overlay
+    userID: 5
