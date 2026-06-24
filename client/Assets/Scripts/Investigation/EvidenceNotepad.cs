@@ -103,7 +103,10 @@ namespace DetectiveRoyale.Investigation
                 },
                 err =>
                 {
-                    if (!silent) UI.NotificationToast.Show($"Save failed: {err}", "error");
+                    if (!silent && _statusText) _statusText.text = $"Save failed: {err}";
+                    // Toast via SendMessage to avoid circular asmdef dependency
+                    var toast = GameObject.Find("NotificationToast");
+                    toast?.SendMessage("ShowToast", $"Save failed: {err}", SendMessageOptions.DontRequireReceiver);
                     if (_saveBtn) _saveBtn.interactable = true;
                 });
         }

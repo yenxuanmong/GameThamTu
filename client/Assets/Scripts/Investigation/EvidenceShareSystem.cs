@@ -127,7 +127,11 @@ namespace DetectiveRoyale.Investigation
                 resp =>
                 {
                     if (_statusText) _statusText.text = "✓ Shared!";
-                    UI.NotificationToast.Show($"Evidence shared with {_selectedPlayerIds.Count} player(s).", "success");
+                    // Toast via SendMessage to avoid circular asmdef dependency
+                    var toast = GameObject.Find("NotificationToast");
+                    toast?.SendMessage("ShowToast",
+                        $"Evidence shared with {_selectedPlayerIds.Count} player(s).",
+                        SendMessageOptions.DontRequireReceiver);
                     _currentEvidence.isShared = true;
                     if (_shareBtn) _shareBtn.interactable = true;
                     StartCoroutine(CloseAfterDelay(1.5f));

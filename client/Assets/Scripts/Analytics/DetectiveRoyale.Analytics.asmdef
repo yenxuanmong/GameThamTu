@@ -3,6 +3,7 @@
     "rootNamespace": "DetectiveRoyale.Analytics",
     "references": [
         "DetectiveRoyale.Core",
+        "DetectiveRoyale.UI",
         "Unity.TextMeshPro"
     ],
     "includePlatforms": [],

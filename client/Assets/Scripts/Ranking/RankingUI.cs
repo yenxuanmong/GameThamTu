@@ -12,23 +12,8 @@ using DetectiveRoyale.Core;
 namespace DetectiveRoyale.Ranking
 {
     [System.Serializable] class LeaderboardResponse { public LeaderboardEntry[] leaderboard; public SeasonInfo season; }
-    [System.Serializable] class MyRankResponse      { public PlayerRankInfo rank; }
-
-    [System.Serializable]
-    public class PlayerRankInfo
-    {
-        public string playerId;
-        public string username;
-        public string tier;
-        public int    points;
-        public int    peakPoints;
-        public int    wins;
-        public int    losses;
-        public float  winRate;
-        public int    streak;
-        public int    globalRank;
-        public int    season;
-    }
+    // PlayerRankInfo is defined in DetectiveRoyale.Core.Models — no duplicate needed
+    [System.Serializable] class MyRankResponse { public PlayerRankInfo rank; }
 
     public class RankingUI : MonoBehaviour
     {

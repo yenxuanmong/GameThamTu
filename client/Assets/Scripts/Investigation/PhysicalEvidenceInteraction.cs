@@ -4,7 +4,6 @@
 // ============================================
 using UnityEngine;
 using DetectiveRoyale.Core;
-using DetectiveRoyale.UI;
 
 namespace DetectiveRoyale.Investigation
 {
