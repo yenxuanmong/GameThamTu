@@ -480,11 +480,7 @@ namespace DetectiveRoyale.Core
 
 namespace DetectiveRoyale.Core.Models
 {
-<<<<<<< HEAD
-    [System.Serializable]
-=======
     [Serializable]
->>>>>>> 6b8ce8b273d3571a7432b4fb850889e05f20d6a7
     public class ConclusionPayload
     {
         public string killerId;
